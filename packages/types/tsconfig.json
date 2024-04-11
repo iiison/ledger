@@ -4,12 +4,13 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "module": "NodeNext",
+    "module": "CommonJS",
     "strict": true,
     "declaration": true,
     "sourceMap": true,
     "target": "es2022",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noEmit": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
