@@ -10,7 +10,6 @@ export async function connectToDB() {
 
     if(error instanceof Error) {
       console.log(error.message)
-
     }
   }
 }

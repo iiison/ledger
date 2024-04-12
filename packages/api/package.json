@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.0.0",
+    "@types/uuid": "^9.0.8",
     "@zodyac/zod-mongoose": "^1.1.2",
     "cors": "^2.8.5",
     "express": "^4.18.2",
@@ -23,6 +24,7 @@
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.1",
     "types": "workspace:*",
+    "uuid": "^9.0.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {

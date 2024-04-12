@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { StatusCodes } from 'http-status-codes'
-import { InventoryItem } from 'types';
+import { AllItemsFromDB } from '../../types';
 
 export enum ResponseStatus {
   Success,
@@ -58,13 +58,13 @@ export function buildBadReqServiceResponse(message: string) {
     ResponseStatus.Failed,
     message,
     null,
-    StatusCodes.BAD_REQUEST.
+    StatusCodes.BAD_REQUEST
   )
 }
 
-export function buildSuccessServiceResponse(
+export function buildSuccessServiceResponse<T>(
   message: string,
-  data: AllItemsFromDB
+  data: T
 ) {
   return new ServiceResponse(
     ResponseStatus.Success,

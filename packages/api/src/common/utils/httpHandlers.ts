@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { ServiceResponse, buildBadReqServiceResponse } from "../models/serviceResponse";
 import { AllItemsFromDB } from "../../types";
 import { ZodError, ZodSchema } from "zod";
+import { StatusCodes } from "http-status-codes";
 
 export const handleServiceResponse = (
   serviceResponse: ServiceResponse<any>,
@@ -28,6 +29,8 @@ export const validateRequestData = (
   } catch(error) {
     const errorMessage = `Invalid input: ${(error as ZodError).errors.map((e) => e.message).join(', ')}`;
 
-    buildBadReqServiceResponse(errorMessage)
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .send(buildBadReqServiceResponse(errorMessage))
   }
 }

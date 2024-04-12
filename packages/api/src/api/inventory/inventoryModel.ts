@@ -16,3 +16,22 @@ export const getInventory = async (): Promise<InventoryItem[] | null> => {
 
   return result
 }
+
+export const getInventoryById = async (id: InventoryItem['id']): Promise<InventoryItem[] | null> => {
+  const result = await Inventory.find({ id })
+
+  return result
+}
+
+export const updateInventory = async (
+  id: InventoryItem['id'],
+  update: Partial<InventoryItem>
+): Promise<InventoryItem | null> => {
+  const result = await Inventory.findOneAndUpdate(
+    { id },
+    { ...update },
+    { new: true }
+  )
+
+  return result
+}
