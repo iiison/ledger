@@ -1,14 +1,16 @@
 import express, { Request, Response, Router } from 'express';
 
-import { handleServiceResponse, validateRequestData } from '../../common/utils/httpHandlers'
 import { inventoryService } from './inventoryService';
 import { validateUpdateInventoryReq } from './validators';
 import { CustomUpdateReq, PartialInventoryItem } from './types';
 import {
   buildInternalErrorServiceResponse
 } from '../../common/models/serviceResponse';
+import { 
+  validateRequestData,
+  handleServiceResponse,
+} from '../../common/utils/httpHandlers'
 import { zInventoryItemBaseSchema } from 'types';
-import { z } from 'zod';
 
 export const inventoryRouter: Router = (() => {
   const router = express.Router()

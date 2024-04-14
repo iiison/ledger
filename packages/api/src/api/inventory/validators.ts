@@ -1,11 +1,10 @@
-import { ZodError, z } from 'zod'
+import { ZodError } from 'zod'
 import { StatusCodes } from 'http-status-codes'
 import { NextFunction, Response } from 'express'
 import { zInventoryItemSchema } from "types"
 
 import { buildBadReqServiceResponse } from '../../common/models/serviceResponse'
 import { CustomUpdateReq, PartialInventoryItem } from './types'
-import { makeZodValidationErrorObj } from '../../common/utils/zodUtilities'
 import { handleZodValidationErrors } from '../../common/utils/httpHandlers'
 
 export const validateUpdateInventoryReq = (

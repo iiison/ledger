@@ -1,8 +1,11 @@
-import { NextFunction, Request, Response } from "express";
-import { ServiceResponse, buildBadReqServiceResponse } from "../models/serviceResponse";
-import { AllItemsFromDB } from "../../types";
 import { ZodError, ZodSchema } from "zod";
 import { StatusCodes } from "http-status-codes";
+import { NextFunction, Request, Response } from "express";
+
+import { 
+  ServiceResponse,
+  buildBadReqServiceResponse 
+} from "../models/serviceResponse";
 import { makeZodValidationErrorObj } from "./zodUtilities";
 
 export const handleServiceResponse = (
