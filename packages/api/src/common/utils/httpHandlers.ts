@@ -3,12 +3,21 @@ import { ServiceResponse, buildBadReqServiceResponse } from "../models/serviceRe
 import { AllItemsFromDB } from "../../types";
 import { ZodError, ZodSchema } from "zod";
 import { StatusCodes } from "http-status-codes";
+import { makeZodValidationErrorObj } from "./zodUtilities";
 
 export const handleServiceResponse = (
   serviceResponse: ServiceResponse<any>,
   response: Response
 ) => {
   return response.status(serviceResponse.statusCode).send(serviceResponse)
+}
+
+export const handleZodValidationErrors = (error: ZodError, res: Response) => {
+  const errorMsg = makeZodValidationErrorObj(error)
+
+  res
+    .status(StatusCodes.BAD_REQUEST)
+    .send(buildBadReqServiceResponse(errorMsg))
 }
 
 export const validateRequestData = (
@@ -19,18 +28,11 @@ export const validateRequestData = (
   next: NextFunction
 ) => {
   try {
-    schema.parse({
-      body: req.body,
-      query: req.query,
-      params: req.params
-    })
+    const parsedBody = schema.parse(req.body)
+    req.body = parsedBody
 
     next()
   } catch(error) {
-    const errorMessage = `Invalid input: ${(error as ZodError).errors.map((e) => e.message).join(', ')}`;
-
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(buildBadReqServiceResponse(errorMessage))
+    handleZodValidationErrors(error, res)
   }
 }

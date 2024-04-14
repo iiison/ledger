@@ -1,6 +1,12 @@
 import { z } from "zod"
+import { v4 as uuidV4 } from "uuid"
 
-import { getInventory, getInventoryById, updateInventory } from "./inventoryModel"
+import { 
+  getInventory,
+  updateInventory,
+  getInventoryById,
+  createInventoryInDB,
+} from "./inventoryModel"
 import { 
   ServiceResponse,
   buildSuccessServiceResponse,
@@ -8,7 +14,11 @@ import {
   buildInternalErrorServiceResponse,
 } from "../../common/models/serviceResponse"
 
-import { zInventoryItemSchema, type InventoryItem } from "types"
+import { 
+  zInventoryItemSchema,
+  type InventoryItem,
+  InventoryItemBase 
+} from "types"
 
 export const inventoryService = {
   findAll: async (): Promise<ServiceResponse<InventoryItem[] | null>> => {
@@ -49,7 +59,7 @@ export const inventoryService = {
     }
   },
 
-  updateById: async(
+  updateById: async (
     id: InventoryItem['id'],
     update: Partial<InventoryItem>
   ): Promise<ServiceResponse<InventoryItem | null>> => {
@@ -66,4 +76,25 @@ export const inventoryService = {
       return buildInternalErrorServiceResponse(errorMsg)
     }
   },
+
+  createInventory: async (
+    item: InventoryItemBase
+  ): Promise<ServiceResponse<InventoryItem | null>> => {
+    try {
+      const invItem: InventoryItem = { 
+        ...item,
+        id: uuidV4(),
+        createdAt: new Date(),
+        lastModified: new Date()
+      }
+
+      const dbItem = await createInventoryInDB(invItem)
+
+      return buildSuccessServiceResponse('Created new inventory item', dbItem)
+    } catch (error) {
+      const errorMsg = `Error creating inventory: ${(error as Error).message}`
+
+      return buildInternalErrorServiceResponse(errorMsg)
+    }
+  }
 }

@@ -1,8 +1,7 @@
-import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
-import zodSchema from '@zodyac/zod-mongoose'
-import { model } from 'mongoose'
 import { z } from 'zod'
-
+import { model } from 'mongoose'
+import zodSchema from '@zodyac/zod-mongoose'
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 import { InventoryItem, zInventoryItemSchema } from 'types'
 
 extendZodWithOpenApi(z)
@@ -32,6 +31,14 @@ export const updateInventory = async (
     { ...update },
     { new: true }
   )
+
+  return result
+}
+
+export const createInventoryInDB = async (
+  item: InventoryItem
+): Promise<InventoryItem> => {
+  const result = await Inventory.create(item)
 
   return result
 }

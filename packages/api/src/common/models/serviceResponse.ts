@@ -1,6 +1,5 @@
 import { z } from 'zod'
 import { StatusCodes } from 'http-status-codes'
-import { AllItemsFromDB } from '../../types';
 
 export enum ResponseStatus {
   Success,

@@ -1,10 +1,12 @@
 import { ZodError, z } from 'zod'
 import { StatusCodes } from 'http-status-codes'
 import { NextFunction, Response } from 'express'
-import { InventoryItem, zInventoryItemSchema } from "types"
+import { zInventoryItemSchema } from "types"
 
 import { buildBadReqServiceResponse } from '../../common/models/serviceResponse'
 import { CustomUpdateReq, PartialInventoryItem } from './types'
+import { makeZodValidationErrorObj } from '../../common/utils/zodUtilities'
+import { handleZodValidationErrors } from '../../common/utils/httpHandlers'
 
 export const validateUpdateInventoryReq = (
   req: CustomUpdateReq,
@@ -27,12 +29,6 @@ export const validateUpdateInventoryReq = (
     req.parsedBody = parsedBody
     next()
   } catch(error) {
-    const errorMessage = `Invalid input: ${
-      (error as ZodError).errors.map((e) => e.message).join(', ')
-    }`
-
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(buildBadReqServiceResponse(errorMessage))
+    handleZodValidationErrors(error as ZodError, res)
   }
 }

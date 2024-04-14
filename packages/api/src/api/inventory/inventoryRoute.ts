@@ -1,27 +1,17 @@
-// import { z } from 'zod';
-import { v4 as uuidV4 } from 'uuid'
 import express, { Request, Response, Router } from 'express';
-// import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi'
 
-import { InventoryItem, zInventoryItemSchema } from 'types'
-// import { createApiResponse } from '../../api-docs/openAPIResponseBuilder'
 import { handleServiceResponse, validateRequestData } from '../../common/utils/httpHandlers'
 import { inventoryService } from './inventoryService';
 import { validateUpdateInventoryReq } from './validators';
-import { buildBadReqServiceResponse, buildInternalErrorServiceResponse } from '../../common/models/serviceResponse';
 import { CustomUpdateReq, PartialInventoryItem } from './types';
-
-// export const inventoryRegistry = new OpenAPIRegistry()
-
-// inventoryRegistry.register('Inventory', zInventoryItemSchema)
+import {
+  buildInternalErrorServiceResponse
+} from '../../common/models/serviceResponse';
+import { zInventoryItemBaseSchema } from 'types';
+import { z } from 'zod';
 
 export const inventoryRouter: Router = (() => {
   const router = express.Router()
-
-  // type UpdateReqData = z.object({
-  //   id: z.string().uuid()
-  // })
-  
 
   // inventoryRegistry.registerPath({
   //   method: 'get',
@@ -59,7 +49,9 @@ export const inventoryRouter: Router = (() => {
 
       const { id, ...update }: PartialInventoryItem = body
 
-      // Must be a better way to define type
+      update.lastModified = new Date()
+
+      // TODO: Must be a better way to define type
       // there should not be check for id here & above this for body.
       if (!id) {
         return
@@ -67,9 +59,19 @@ export const inventoryRouter: Router = (() => {
 
       const updatedItem = await inventoryService.updateById(id, update)
 
-      console.log(updatedItem)
+      handleServiceResponse(updatedItem, res)
+    }
+  )
 
-      handleServiceResponse(buildBadReqServiceResponse('False!'), res)
+  router.post(
+    '/add', 
+    validateRequestData(zInventoryItemBaseSchema), 
+    async (req: Request, res: Response, ) => {
+      const { body } = req
+
+      const item = await inventoryService.createInventory({...body})
+
+      handleServiceResponse(item, res)
     }
   )
 
