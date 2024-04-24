@@ -7,7 +7,6 @@ import { InventoryItem, zInventoryItemSchema } from 'types'
 extendZodWithOpenApi(z)
 
 export const inventorySchema = zodSchema(zInventoryItemSchema)
-
 export const Inventory = model<InventoryItem>('inventory', inventorySchema)
 
 export const getInventory = async (): Promise<InventoryItem[] | null> => {
