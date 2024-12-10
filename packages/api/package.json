@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.0.0",
+    "@elastic/elasticsearch": "^8.13.1",
     "@types/uuid": "^9.0.8",
     "@zodyac/zod-mongoose": "^1.1.2",
     "cors": "^2.8.5",

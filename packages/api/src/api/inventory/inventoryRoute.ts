@@ -70,7 +70,6 @@ export const inventoryRouter: Router = (() => {
     validateRequestData(zInventoryItemBaseSchema), 
     async (req: Request, res: Response, ) => {
       const { body } = req
-
       const item = await inventoryService.createInventory({...body})
 
       handleServiceResponse(item, res)

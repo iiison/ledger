@@ -5,6 +5,7 @@ import express from 'express'
 import { connectToDB } from './dbUtils'
 import { inventoryRouter } from './api/inventory/inventoryRoute'
 import { rateRouter } from './api/rate/rateRouter'
+import { customerRouter } from './api/customer/customerRouter'
 
 const app = express()
 const PORT = 8000
@@ -19,6 +20,7 @@ app.use(cors())
 // Routes
 app.use('/inventory', inventoryRouter)
 app.use('/rate', rateRouter)
+app.use('/customers', customerRouter)
 
 connectToDB()
 

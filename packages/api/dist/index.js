@@ -17111,10 +17111,10 @@ var require_bson = __commonJS({
       return webByteUtils.fromNumberArray(Array.from({ length: byteLength }, () => Math.floor(Math.random() * 256)));
     }
     var webRandomBytes = (() => {
-      const { crypto } = globalThis;
-      if (crypto != null && typeof crypto.getRandomValues === "function") {
+      const { crypto: crypto3 } = globalThis;
+      if (crypto3 != null && typeof crypto3.getRandomValues === "function") {
         return (byteLength) => {
-          return crypto.getRandomValues(webByteUtils.allocate(byteLength));
+          return crypto3.getRandomValues(webByteUtils.allocate(byteLength));
         };
       } else {
         if (isReactNative()) {
@@ -22475,7 +22475,7 @@ var require_utils2 = __commonJS({
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DOCUMENT_DB_CHECK = exports.TimeoutController = exports.request = exports.matchesParentDomain = exports.parseUnsignedInteger = exports.parseInteger = exports.compareObjectId = exports.commandSupportsReadConcern = exports.shuffle = exports.supportsRetryableWrites = exports.enumToString = exports.emitWarningOnce = exports.emitWarning = exports.MONGODB_WARNING_CODE = exports.DEFAULT_PK_FACTORY = exports.HostAddress = exports.BufferPool = exports.List = exports.deepCopy = exports.isRecord = exports.setDifference = exports.isHello = exports.isSuperset = exports.resolveOptions = exports.hasAtomicOperators = exports.calculateDurationInMs = exports.now = exports.makeStateMachine = exports.errorStrictEqual = exports.arrayStrictEqual = exports.eachAsync = exports.maxWireVersion = exports.uuidV4 = exports.maybeCallback = exports.makeCounter = exports.MongoDBCollectionNamespace = exports.MongoDBNamespace = exports.ns = exports.getTopology = exports.decorateWithExplain = exports.decorateWithReadConcern = exports.decorateWithCollation = exports.isPromiseLike = exports.applyRetryableWrites = exports.filterOptions = exports.mergeOptions = exports.isObject = exports.normalizeHintField = exports.hostMatchesWildcards = exports.ByteUtils = void 0;
     exports.isHostMatch = exports.COSMOS_DB_MSG = exports.DOCUMENT_DB_MSG = exports.COSMOS_DB_CHECK = void 0;
-    var crypto = require("crypto");
+    var crypto3 = require("crypto");
     var http = require("http");
     var timers_1 = require("timers");
     var url = require("url");
@@ -22660,7 +22660,7 @@ var require_utils2 = __commonJS({
     }
     exports.maybeCallback = maybeCallback;
     function uuidV4() {
-      const result = crypto.randomBytes(16);
+      const result = crypto3.randomBytes(16);
       result[6] = result[6] & 15 | 64;
       result[8] = result[8] & 63 | 128;
       return result;
@@ -38076,12 +38076,12 @@ var require_crypto_callbacks = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.hmacSha256Hook = exports.hmacSha512Hook = exports.aes256CtrDecryptHook = exports.aes256CtrEncryptHook = exports.aes256CbcDecryptHook = exports.aes256CbcEncryptHook = exports.signRsaSha256Hook = exports.makeHmacHook = exports.sha256Hook = exports.randomHook = exports.makeAES256Hook = void 0;
-    var crypto = require("crypto");
+    var crypto3 = require("crypto");
     function makeAES256Hook(method, mode) {
       return function(key, iv, input, output) {
         let result;
         try {
-          const cipher = crypto[method](mode, key, iv);
+          const cipher = crypto3[method](mode, key, iv);
           cipher.setAutoPadding(false);
           result = cipher.update(input);
           const final = cipher.final();
@@ -38098,7 +38098,7 @@ var require_crypto_callbacks = __commonJS({
     exports.makeAES256Hook = makeAES256Hook;
     function randomHook(buffer, count) {
       try {
-        crypto.randomFillSync(buffer, 0, count);
+        crypto3.randomFillSync(buffer, 0, count);
       } catch (e) {
         return e;
       }
@@ -38108,7 +38108,7 @@ var require_crypto_callbacks = __commonJS({
     function sha256Hook(input, output) {
       let result;
       try {
-        result = crypto.createHash("sha256").update(input).digest();
+        result = crypto3.createHash("sha256").update(input).digest();
       } catch (e) {
         return e;
       }
@@ -38120,7 +38120,7 @@ var require_crypto_callbacks = __commonJS({
       return (key, input, output) => {
         let result;
         try {
-          result = crypto.createHmac(algorithm, key).update(input).digest();
+          result = crypto3.createHmac(algorithm, key).update(input).digest();
         } catch (e) {
           return e;
         }
@@ -38132,7 +38132,7 @@ var require_crypto_callbacks = __commonJS({
     function signRsaSha256Hook(key, input, output) {
       let result;
       try {
-        const signer = crypto.createSign("sha256WithRSAEncryption");
+        const signer = crypto3.createSign("sha256WithRSAEncryption");
         const privateKey = Buffer.from(`-----BEGIN PRIVATE KEY-----
 ${key.toString("base64")}
 -----END PRIVATE KEY-----
@@ -39551,7 +39551,7 @@ var require_mongocr = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MongoCR = void 0;
-    var crypto = require("crypto");
+    var crypto3 = require("crypto");
     var error_1 = require_error();
     var utils_1 = require_utils2();
     var auth_provider_1 = require_auth_provider();
@@ -39563,8 +39563,8 @@ var require_mongocr = __commonJS({
         }
         const { username, password, source } = credentials;
         const { nonce } = await connection.commandAsync((0, utils_1.ns)(`${source}.$cmd`), { getnonce: 1 }, void 0);
-        const hashPassword = crypto.createHash("md5").update(`${username}:mongo:${password}`, "utf8").digest("hex");
-        const key = crypto.createHash("md5").update(`${nonce}${username}${hashPassword}`, "utf8").digest("hex");
+        const hashPassword = crypto3.createHash("md5").update(`${username}:mongo:${password}`, "utf8").digest("hex");
+        const key = crypto3.createHash("md5").update(`${nonce}${username}${hashPassword}`, "utf8").digest("hex");
         const authenticateCommand = {
           authenticate: 1,
           user: username,
@@ -39584,7 +39584,7 @@ var require_mongodb_aws = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MongoDBAWS = void 0;
-    var crypto = require("crypto");
+    var crypto3 = require("crypto");
     var process2 = require("process");
     var util_1 = require("util");
     var BSON = require_bson2();
@@ -39626,7 +39626,7 @@ var require_mongodb_aws = __commonJS({
     var MongoDBAWS = class extends auth_provider_1.AuthProvider {
       constructor() {
         super();
-        this.randomBytesAsync = (0, util_1.promisify)(crypto.randomBytes);
+        this.randomBytesAsync = (0, util_1.promisify)(crypto3.randomBytes);
       }
       async auth(authContext) {
         const { connection } = authContext;
@@ -40754,7 +40754,7 @@ var require_scram = __commonJS({
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ScramSHA256 = exports.ScramSHA1 = void 0;
     var saslprep_1 = require_node2();
-    var crypto = require("crypto");
+    var crypto3 = require("crypto");
     var util_1 = require("util");
     var bson_1 = require_bson2();
     var error_1 = require_error();
@@ -40765,7 +40765,7 @@ var require_scram = __commonJS({
       constructor(cryptoMethod) {
         super();
         this.cryptoMethod = cryptoMethod || "sha1";
-        this.randomBytesAsync = (0, util_1.promisify)(crypto.randomBytes);
+        this.randomBytesAsync = (0, util_1.promisify)(crypto3.randomBytes);
       }
       async prepare(handshakeDoc, authContext) {
         const cryptoMethod = this.cryptoMethod;
@@ -40909,9 +40909,9 @@ var require_scram = __commonJS({
       }
       let md5;
       try {
-        md5 = crypto.createHash("md5");
+        md5 = crypto3.createHash("md5");
       } catch (err) {
-        if (crypto.getFips()) {
+        if (crypto3.getFips()) {
           throw new Error("Auth mechanism SCRAM-SHA-1 is not supported in FIPS mode");
         }
         throw err;
@@ -40934,10 +40934,10 @@ var require_scram = __commonJS({
       return Buffer.from(res).toString("base64");
     }
     function H(method, text) {
-      return crypto.createHash(method).update(text).digest();
+      return crypto3.createHash(method).update(text).digest();
     }
     function HMAC(method, key, text) {
-      return crypto.createHmac(method, key).update(text).digest();
+      return crypto3.createHmac(method, key).update(text).digest();
     }
     var _hiCache = {};
     var _hiCacheCount = 0;
@@ -40954,7 +40954,7 @@ var require_scram = __commonJS({
       if (_hiCache[key] != null) {
         return _hiCache[key];
       }
-      const saltedData = crypto.pbkdf2Sync(data, salt, iterations, hiLengthMap[cryptoMethod], cryptoMethod);
+      const saltedData = crypto3.pbkdf2Sync(data, salt, iterations, hiLengthMap[cryptoMethod], cryptoMethod);
       if (_hiCacheCount >= 200) {
         _hiCachePurge();
       }
@@ -40966,8 +40966,8 @@ var require_scram = __commonJS({
       if (lhs.length !== rhs.length) {
         return false;
       }
-      if (typeof crypto.timingSafeEqual === "function") {
-        return crypto.timingSafeEqual(lhs, rhs);
+      if (typeof crypto3.timingSafeEqual === "function") {
+        return crypto3.timingSafeEqual(lhs, rhs);
       }
       let result = 0;
       for (let i = 0; i < lhs.length; i++) {
@@ -49261,13 +49261,13 @@ var require_notFound = __commonJS({
        * OverwriteModel Error constructor.
        * @api private
        */
-      constructor(filter, model2, numAffected, result) {
+      constructor(filter, model4, numAffected, result) {
         let msg;
         const messages = MongooseError.messages;
         if (messages.DocumentNotFoundError != null) {
-          msg = typeof messages.DocumentNotFoundError === "function" ? messages.DocumentNotFoundError(filter, model2) : messages.DocumentNotFoundError;
+          msg = typeof messages.DocumentNotFoundError === "function" ? messages.DocumentNotFoundError(filter, model4) : messages.DocumentNotFoundError;
         } else {
-          msg = 'No document found for query "' + util2.inspect(filter) + '" on model "' + model2 + '"';
+          msg = 'No document found for query "' + util2.inspect(filter) + '" on model "' + model4 + '"';
         }
         super(msg);
         this.result = result;
@@ -49343,10 +49343,10 @@ var require_cast = __commonJS({
       /*!
        * ignore
        */
-      setModel(model2) {
-        this.model = model2;
+      setModel(model4) {
+        this.model = model4;
         this.message = formatMessage(
-          model2,
+          model4,
           this.kind,
           this.value,
           this.path,
@@ -49385,22 +49385,22 @@ var require_cast = __commonJS({
         return messageFormat;
       }
     }
-    function formatMessage(model2, kind, value, path, messageFormat, valueType, reason) {
+    function formatMessage(model4, kind, value, path, messageFormat, valueType, reason) {
       if (typeof messageFormat === "string") {
         const stringValue = getStringValue(value);
         let ret = messageFormat.replace("{KIND}", kind).replace("{VALUE}", stringValue).replace("{PATH}", path);
-        if (model2 != null) {
-          ret = ret.replace("{MODEL}", model2.modelName);
+        if (model4 != null) {
+          ret = ret.replace("{MODEL}", model4.modelName);
         }
         return ret;
       } else if (typeof messageFormat === "function") {
-        return messageFormat(value, path, model2, kind);
+        return messageFormat(value, path, model4, kind);
       } else {
         const stringValue = getStringValue(value);
         const valueTypeMsg = valueType ? " (type " + valueType + ")" : "";
         let ret = "Cast to " + kind + " failed for value " + stringValue + valueTypeMsg + ' at path "' + path + '"';
-        if (model2 != null) {
-          ret += ' for model "' + model2.modelName + '"';
+        if (model4 != null) {
+          ret += ' for model "' + model4.modelName + '"';
         }
         if (reason != null && typeof reason.constructor === "function" && reason.constructor.name !== "AssertionError" && reason.constructor.name !== "Error") {
           ret += ' because of "' + reason.constructor.name + '"';
@@ -51698,13 +51698,13 @@ var require_queryHelpers = __commonJS({
       });
       return pop;
     };
-    exports.createModel = function createModel(model2, doc, fields, userProvidedFields, options) {
-      model2.hooks.execPreSync("createModel", doc);
-      const discriminatorMapping = model2.schema ? model2.schema.discriminatorMapping : null;
+    exports.createModel = function createModel(model4, doc, fields, userProvidedFields, options) {
+      model4.hooks.execPreSync("createModel", doc);
+      const discriminatorMapping = model4.schema ? model4.schema.discriminatorMapping : null;
       const key = discriminatorMapping && discriminatorMapping.isRoot ? discriminatorMapping.key : null;
       const value = doc[key];
-      if (key && value && model2.discriminators) {
-        const discriminator = model2.discriminators[value] || getDiscriminatorByValue(model2.discriminators, value);
+      if (key && value && model4.discriminators) {
+        const discriminator = model4.discriminators[value] || getDiscriminatorByValue(model4.discriminators, value);
         if (discriminator) {
           const _fields = clone(userProvidedFields);
           exports.applyPaths(_fields, discriminator.schema);
@@ -51719,11 +51719,11 @@ var require_queryHelpers = __commonJS({
       if (options != null && "defaults" in options) {
         _opts.defaults = options.defaults;
       }
-      return new model2(void 0, fields, _opts);
+      return new model4(void 0, fields, _opts);
     };
-    exports.createModelAndInit = function createModelAndInit(model2, doc, fields, userProvidedFields, options, populatedIds, callback2) {
+    exports.createModelAndInit = function createModelAndInit(model4, doc, fields, userProvidedFields, options, populatedIds, callback2) {
       const initOpts = populatedIds ? { populated: populatedIds } : void 0;
-      const casted = exports.createModel(model2, doc, fields, userProvidedFields, options);
+      const casted = exports.createModel(model4, doc, fields, userProvidedFields, options);
       try {
         casted.$init(doc, initOpts, callback2);
       } catch (error) {
@@ -53100,8 +53100,8 @@ var require_methods = __commonJS({
         if (arg == null) {
           return false;
         }
-        const model2 = arg.constructor;
-        if (!(arg instanceof Document) || model2.modelName !== ref && model2.baseModelName !== ref) {
+        const model4 = arg.constructor;
+        if (!(arg instanceof Document) || model4.modelName !== ref && model4.baseModelName !== ref) {
           return false;
         }
       }
@@ -54423,9 +54423,9 @@ var require_document = __commonJS({
           if (!(val instanceof Document)) {
             return false;
           }
-          const model2 = val.constructor;
+          const model4 = val.constructor;
           const ref = schema.options.ref;
-          if (ref != null && (ref === model2.modelName || ref === model2.baseModelName)) {
+          if (ref != null && (ref === model4.modelName || ref === model4.baseModelName)) {
             return true;
           }
           const refPath = schema.options.refPath;
@@ -54433,7 +54433,7 @@ var require_document = __commonJS({
             return false;
           }
           const modelName = val.get(refPath);
-          return modelName === model2.modelName || modelName === model2.baseModelName;
+          return modelName === model4.modelName || modelName === model4.baseModelName;
         })();
         let didPopulate = false;
         if (refMatches && val instanceof Document && (!val.$__.wasPopulated || utils.deepEqual(val.$__.wasPopulated.value, val._id))) {
@@ -56527,7 +56527,7 @@ var require_utils6 = __commonJS({
       object.expireAfterSeconds = typeof object.expires !== "string" ? object.expires : Math.round(ms(object.expires) / 1e3);
       delete object.expires;
     };
-    exports.populate = function populate(path, select, model2, match, options, subPopulate, justOne, count) {
+    exports.populate = function populate(path, select, model4, match, options, subPopulate, justOne, count) {
       let obj = null;
       if (arguments.length === 1) {
         if (path instanceof PopulateOptions) {
@@ -56544,18 +56544,18 @@ var require_utils6 = __commonJS({
         } else {
           obj = { path };
         }
-      } else if (typeof model2 === "object") {
+      } else if (typeof model4 === "object") {
         obj = {
           path,
           select,
-          match: model2,
+          match: model4,
           options: match
         };
       } else {
         obj = {
           path,
           select,
-          model: model2,
+          model: model4,
           match,
           options,
           populate: subPopulate,
@@ -58327,7 +58327,7 @@ var require_applyHooks = __commonJS({
       "init"
     ];
     var alreadyHookedFunctions = new Set(applyHooks.middlewareFunctions.flatMap((fn) => [fn, `$__${fn}`]));
-    function applyHooks(model2, schema, options) {
+    function applyHooks(model4, schema, options) {
       options = options || {};
       const kareemOptions = {
         useErrorHandlers: true,
@@ -58335,8 +58335,8 @@ var require_applyHooks = __commonJS({
         nullResultByDefault: true,
         contextParameter: true
       };
-      const objToDecorate = options.decorateDoc ? model2 : model2.prototype;
-      model2.$appliedHooks = true;
+      const objToDecorate = options.decorateDoc ? model4 : model4.prototype;
+      model4.$appliedHooks = true;
       for (const key of Object.keys(schema.paths)) {
         const type = schema.paths[key];
         let childModel = null;
@@ -58379,7 +58379,7 @@ var require_applyHooks = __commonJS({
         }
         return true;
       });
-      model2._middleware = middleware;
+      model4._middleware = middleware;
       objToDecorate.$__originalValidate = objToDecorate.$__originalValidate || objToDecorate.$__validate;
       const internalMethodsToWrap = options && options.isChildSchema ? ["save", "validate", "deleteOne"] : ["save", "validate"];
       for (const method of internalMethodsToWrap) {
@@ -58413,7 +58413,7 @@ var require_applyHooks = __commonJS({
               this,
               argsWithoutCallback.concat([callback2])
             );
-          }, model2.events);
+          }, model4.events);
         };
         objToDecorate[`$__${method}`] = middleware.createWrapper(method, originalMethod, null, customMethodOptions);
       }
@@ -61467,28 +61467,28 @@ var require_discriminator = __commonJS({
       virtuals: true,
       methods: true
     };
-    module2.exports = function discriminator(model2, name, schema, tiedValue, applyPlugins, mergeHooks) {
+    module2.exports = function discriminator(model4, name, schema, tiedValue, applyPlugins, mergeHooks) {
       if (!(schema && schema.instanceOfSchema)) {
         throw new Error("You must pass a valid discriminator Schema");
       }
       mergeHooks = mergeHooks == null ? true : mergeHooks;
-      if (model2.schema.discriminatorMapping && !model2.schema.discriminatorMapping.isRoot) {
+      if (model4.schema.discriminatorMapping && !model4.schema.discriminatorMapping.isRoot) {
         throw new Error('Discriminator "' + name + '" can only be a discriminator of the root model');
       }
       if (applyPlugins) {
         const applyPluginsToDiscriminators = get(
-          model2.base,
+          model4.base,
           "options.applyPluginsToDiscriminators",
           false
         ) || !mergeHooks;
-        model2.base._applyPlugins(schema, {
+        model4.base._applyPlugins(schema, {
           skipTopLevel: !applyPluginsToDiscriminators
         });
       } else if (!mergeHooks) {
         applyBuiltinPlugins(schema);
       }
-      const key = model2.schema.options.discriminatorKey;
-      const existingPath = model2.schema.path(key);
+      const key = model4.schema.options.discriminatorKey;
+      const existingPath = model4.schema.path(key);
       if (existingPath != null) {
         if (!utils.hasUserDefinedProperty(existingPath.options, "select")) {
           existingPath.options.select = true;
@@ -61501,12 +61501,12 @@ var require_discriminator = __commonJS({
           select: true,
           $skipDiscriminatorCheck: true
         };
-        baseSchemaAddition[key][model2.schema.options.typeKey] = String;
-        model2.schema.add(baseSchemaAddition);
+        baseSchemaAddition[key][model4.schema.options.typeKey] = String;
+        model4.schema.add(baseSchemaAddition);
         defineKey({
           prop: key,
-          prototype: model2.prototype,
-          options: model2.schema.options
+          prototype: model4.prototype,
+          options: model4.schema.options
         });
       }
       if (schema.path(key) && schema.path(key).options.$skipDiscriminatorCheck !== true) {
@@ -61592,7 +61592,7 @@ var require_discriminator = __commonJS({
         }
         schema2.options.id = id;
         if (mergeHooks) {
-          schema2.s.hooks = model2.schema.s.hooks.merge(schema2.s.hooks);
+          schema2.s.hooks = model4.schema.s.hooks.merge(schema2.s.hooks);
         }
         if (applyPlugins) {
           schema2.plugins = Array.prototype.slice.call(baseSchema.plugins);
@@ -61600,18 +61600,18 @@ var require_discriminator = __commonJS({
         schema2.callQueue = baseSchema.callQueue.concat(schema2.callQueue);
         delete schema2._requiredpaths;
       }
-      merge(schema, model2.schema);
-      if (!model2.discriminators) {
-        model2.discriminators = {};
+      merge(schema, model4.schema);
+      if (!model4.discriminators) {
+        model4.discriminators = {};
       }
-      if (!model2.schema.discriminatorMapping) {
-        model2.schema.discriminatorMapping = { key, value: null, isRoot: true };
+      if (!model4.schema.discriminatorMapping) {
+        model4.schema.discriminatorMapping = { key, value: null, isRoot: true };
       }
-      if (!model2.schema.discriminators) {
-        model2.schema.discriminators = {};
+      if (!model4.schema.discriminators) {
+        model4.schema.discriminators = {};
       }
-      model2.schema.discriminators[name] = schema;
-      if (model2.discriminators[name] && !schema.options.overwriteModels) {
+      model4.schema.discriminators[name] = schema;
+      if (model4.discriminators[name] && !schema.options.overwriteModels) {
         throw new Error('Discriminator with name "' + name + '" already exists');
       }
       return schema;
@@ -64279,27 +64279,27 @@ var require_schema2 = __commonJS({
       }
       return this;
     };
-    Schema2.prototype.loadClass = function(model2, virtualsOnly) {
-      if (model2 === Object.prototype || model2 === Function.prototype || model2.prototype.hasOwnProperty("$isMongooseModelPrototype") || model2.prototype.hasOwnProperty("$isMongooseDocumentPrototype")) {
+    Schema2.prototype.loadClass = function(model4, virtualsOnly) {
+      if (model4 === Object.prototype || model4 === Function.prototype || model4.prototype.hasOwnProperty("$isMongooseModelPrototype") || model4.prototype.hasOwnProperty("$isMongooseDocumentPrototype")) {
         return this;
       }
-      this.loadClass(Object.getPrototypeOf(model2), virtualsOnly);
+      this.loadClass(Object.getPrototypeOf(model4), virtualsOnly);
       if (!virtualsOnly) {
-        Object.getOwnPropertyNames(model2).forEach(function(name) {
+        Object.getOwnPropertyNames(model4).forEach(function(name) {
           if (name.match(/^(length|name|prototype|constructor|__proto__)$/)) {
             return;
           }
-          const prop = Object.getOwnPropertyDescriptor(model2, name);
+          const prop = Object.getOwnPropertyDescriptor(model4, name);
           if (prop.hasOwnProperty("value")) {
             this.static(name, prop.value);
           }
         }, this);
       }
-      Object.getOwnPropertyNames(model2.prototype).forEach(function(name) {
+      Object.getOwnPropertyNames(model4.prototype).forEach(function(name) {
         if (name.match(/^(constructor)$/)) {
           return;
         }
-        const method = Object.getOwnPropertyDescriptor(model2.prototype, name);
+        const method = Object.getOwnPropertyDescriptor(model4.prototype, name);
         if (!virtualsOnly) {
           if (typeof method.value === "function") {
             this.method(name, method.value);
@@ -64662,15 +64662,15 @@ var require_connection2 = __commonJS({
       const errorsMap = {};
       const { continueOnError } = options;
       delete options.continueOnError;
-      for (const model2 of Object.values(this.models)) {
+      for (const model4 of Object.values(this.models)) {
         try {
-          result[model2.modelName] = await model2.createCollection({});
+          result[model4.modelName] = await model4.createCollection({});
         } catch (err) {
           if (!continueOnError) {
-            errorsMap[model2.modelName] = err;
+            errorsMap[model4.modelName] = err;
             break;
           } else {
-            result[model2.modelName] = err;
+            result[model4.modelName] = err;
           }
         }
       }
@@ -64781,8 +64781,8 @@ var require_connection2 = __commonJS({
           this._queue.push({ fn: resolve });
         });
       }
-      for (const model2 of Object.values(this.models)) {
-        delete model2.$init;
+      for (const model4 of Object.values(this.models)) {
+        delete model4.$init;
       }
       return this.db.dropDatabase();
     };
@@ -64846,8 +64846,8 @@ var require_connection2 = __commonJS({
         }
         throw err;
       });
-      for (const model2 of Object.values(this.models)) {
-        model2.init().catch(function $modelInitNoop() {
+      for (const model4 of Object.values(this.models)) {
+        model4.init().catch(function $modelInitNoop() {
         });
       }
       if (_fireAndForget) {
@@ -64909,8 +64909,8 @@ var require_connection2 = __commonJS({
       } else {
         this.$wasForceClosed = !!force;
       }
-      for (const model2 of Object.values(this.models)) {
-        delete model2.$init;
+      for (const model4 of Object.values(this.models)) {
+        delete model4.$init;
       }
       return this._close(force, false);
     };
@@ -65032,52 +65032,52 @@ var require_connection2 = __commonJS({
         }
         return this.models[name];
       }
-      let model2;
+      let model4;
       if (schema && schema.instanceOfSchema) {
         applyPlugins(schema, this.plugins, null, "$connectionPluginsApplied");
-        model2 = this.base._model(fn || name, schema, collection, opts);
+        model4 = this.base._model(fn || name, schema, collection, opts);
         if (!this.models[name]) {
-          this.models[name] = model2;
+          this.models[name] = model4;
         }
-        model2.init().catch(function $modelInitNoop() {
+        model4.init().catch(function $modelInitNoop() {
         });
-        return model2;
+        return model4;
       }
       if (this.models[name] && collection) {
-        model2 = this.models[name];
-        schema = model2.prototype.schema;
-        const sub = model2.__subclass(this, schema, collection);
+        model4 = this.models[name];
+        schema = model4.prototype.schema;
+        const sub = model4.__subclass(this, schema, collection);
         return sub;
       }
       if (arguments.length === 1) {
-        model2 = this.models[name];
-        if (!model2) {
+        model4 = this.models[name];
+        if (!model4) {
           throw new MongooseError.MissingSchemaError(name);
         }
-        return model2;
+        return model4;
       }
-      if (!model2) {
+      if (!model4) {
         throw new MongooseError.MissingSchemaError(name);
       }
-      if (this === model2.prototype.db && (!collection || collection === model2.collection.name)) {
+      if (this === model4.prototype.db && (!collection || collection === model4.collection.name)) {
         if (!this.models[name]) {
-          this.models[name] = model2;
+          this.models[name] = model4;
         }
-        return model2;
+        return model4;
       }
-      this.models[name] = model2.__subclass(this, schema, collection);
+      this.models[name] = model4.__subclass(this, schema, collection);
       return this.models[name];
     };
     Connection.prototype.deleteModel = function(name) {
       if (typeof name === "string") {
-        const model2 = this.model(name);
-        if (model2 == null) {
+        const model4 = this.model(name);
+        if (model4 == null) {
           return this;
         }
-        const collectionName = model2.collection.name;
+        const collectionName = model4.collection.name;
         delete this.models[name];
         delete this.collections[collectionName];
-        this.emit("deleteModel", model2);
+        this.emit("deleteModel", model4);
       } else if (name instanceof RegExp) {
         const pattern = name;
         const names = this.modelNames();
@@ -65145,15 +65145,15 @@ var require_connection2 = __commonJS({
       const errorsMap = {};
       const { continueOnError } = options;
       delete options.continueOnError;
-      for (const model2 of Object.values(this.models)) {
+      for (const model4 of Object.values(this.models)) {
         try {
-          result[model2.modelName] = await model2.syncIndexes(options);
+          result[model4.modelName] = await model4.syncIndexes(options);
         } catch (err) {
           if (!continueOnError) {
-            errorsMap[model2.modelName] = err;
+            errorsMap[model4.modelName] = err;
             break;
           } else {
-            result[model2.modelName] = err;
+            result[model4.modelName] = err;
           }
         }
       }
@@ -65576,8 +65576,8 @@ var require_connection3 = __commonJS({
       }
       this._connectionString = client.s.url;
       _setClient(this, client, {}, client.s.options.dbName);
-      for (const model2 of Object.values(this.models)) {
-        model2.init().catch(function $modelInitNoop() {
+      for (const model4 of Object.values(this.models)) {
+        model4.init().catch(function $modelInitNoop() {
         });
       }
       return this;
@@ -65885,12 +65885,12 @@ var require_queryCursor = __commonJS({
       this.cursor = null;
       this.skipped = false;
       this.query = query;
-      const model2 = query.model;
+      const model4 = query.model;
       this._mongooseOptions = {};
       this._transforms = [];
-      this.model = model2;
+      this.model = model4;
       this.options = {};
-      model2.hooks.execPre("find", query, (err) => {
+      model4.hooks.execPre("find", query, (err) => {
         if (err != null) {
           if (err instanceof kareem.skipWrappedFunction) {
             const resultValue = err.args[0];
@@ -65918,8 +65918,8 @@ var require_queryCursor = __commonJS({
         if (this.options.batchSize) {
           this.options._populateBatchSize = Math.min(this.options.batchSize, 5e3);
         }
-        if (model2.collection._shouldBufferCommands() && model2.collection.buffer) {
-          model2.collection.queue.push([
+        if (model4.collection._shouldBufferCommands() && model4.collection.buffer) {
+          model4.collection.queue.push([
             () => _getRawCursor(query, this)
           ]);
         } else {
@@ -66174,8 +66174,8 @@ var require_queryCursor = __commonJS({
           callback2(null, doc);
         });
       }
-      const { model: model2, _fields, _userProvidedFields, options } = ctx.query;
-      helpers.createModelAndInit(model2, doc, _fields, _userProvidedFields, options, pop, (err, doc2) => {
+      const { model: model4, _fields, _userProvidedFields, options } = ctx.query;
+      helpers.createModelAndInit(model4, doc, _fields, _userProvidedFields, options, pop, (err, doc2) => {
         if (err != null) {
           return callback2(err);
         }
@@ -69802,7 +69802,7 @@ var require_query = __commonJS({
       "writeConcern",
       "wtimeout"
     ]);
-    function Query(conditions, options, model2, collection) {
+    function Query(conditions, options, model4, collection) {
       if (!this._mongooseOptions) {
         this._mongooseOptions = {};
       }
@@ -69817,9 +69817,9 @@ var require_query = __commonJS({
       if (collection) {
         this.mongooseCollection = collection;
       }
-      if (model2) {
-        this.model = model2;
-        this.schema = model2.schema;
+      if (model4) {
+        this.model = model4;
+        this.schema = model4.schema;
       }
       if (this.model && this.model._mapreduce) {
         this.lean();
@@ -69849,16 +69849,16 @@ var require_query = __commonJS({
     });
     Query.use$geoWithin = mquery.use$geoWithin;
     Query.prototype.toConstructor = function toConstructor() {
-      const model2 = this.model;
+      const model4 = this.model;
       const coll = this.mongooseCollection;
       const CustomQuery = function(criteria, options2) {
         if (!(this instanceof CustomQuery)) {
           return new CustomQuery(criteria, options2);
         }
         this._mongooseOptions = clone(p._mongooseOptions);
-        Query.call(this, criteria, options2 || null, model2, coll);
+        Query.call(this, criteria, options2 || null, model4, coll);
       };
-      util2.inherits(CustomQuery, model2.Query);
+      util2.inherits(CustomQuery, model4.Query);
       const p = CustomQuery.prototype;
       p.options = {};
       const options = Object.assign({}, this.options);
@@ -69881,9 +69881,9 @@ var require_query = __commonJS({
       return CustomQuery;
     };
     Query.prototype.clone = function() {
-      const model2 = this.model;
+      const model4 = this.model;
       const collection = this.mongooseCollection;
-      const q = new this.model.Query({}, {}, model2, collection);
+      const q = new this.model.Query({}, {}, model4, collection);
       const options = Object.assign({}, this.options);
       if (options.sort != null) {
         q.sort(options.sort);
@@ -70303,15 +70303,15 @@ var require_query = __commonJS({
       }
       return ret;
     };
-    Query.prototype._optionsForExec = function(model2) {
+    Query.prototype._optionsForExec = function(model4) {
       const options = clone(this.options);
       delete options.populate;
-      model2 = model2 || this.model;
-      if (!model2) {
+      model4 = model4 || this.model;
+      if (!model4) {
         return options;
       }
-      applyWriteConcern(model2.schema, options);
-      const readPreference = model2 && model2.schema && model2.schema.options && model2.schema.options.read;
+      applyWriteConcern(model4.schema, options);
+      const readPreference = model4 && model4.schema && model4.schema.options && model4.schema.options.read;
       if (!("readPreference" in options) && readPreference) {
         options.readPreference = readPreference;
       }
@@ -70546,7 +70546,7 @@ var require_query = __commonJS({
       if (!doc && !this.options.includeResultMetadata) {
         return callback2(null, null);
       }
-      const model2 = this.model;
+      const model4 = this.model;
       const projection = clone(this._fields);
       const userProvidedFields = this._userProvidedFields || {};
       const mongooseOptions = this._mongooseOptions;
@@ -70564,8 +70564,8 @@ var require_query = __commonJS({
             delete doc[versionKey];
           }
         }
-        return mongooseOptions.lean ? _completeOneLean(model2.schema, doc, null, res, options, callback2) : completeOne(
-          model2,
+        return mongooseOptions.lean ? _completeOneLean(model4.schema, doc, null, res, options, callback2) : completeOne(
+          model4,
           doc,
           res,
           options,
@@ -70577,20 +70577,20 @@ var require_query = __commonJS({
       }
       const pop = helpers.preparePopulationOptionsMQ(this, this._mongooseOptions);
       if (mongooseOptions.lean) {
-        return model2.populate(doc, pop).then(
+        return model4.populate(doc, pop).then(
           (doc2) => {
-            _completeOneLean(model2.schema, doc2, null, res, options, callback2);
+            _completeOneLean(model4.schema, doc2, null, res, options, callback2);
           },
           (error) => {
             callback2(error);
           }
         );
       }
-      completeOne(model2, doc, res, options, projection, userProvidedFields, [], (err, doc2) => {
+      completeOne(model4, doc, res, options, projection, userProvidedFields, [], (err, doc2) => {
         if (err != null) {
           return callback2(err);
         }
-        model2.populate(doc2, pop).then((res2) => {
+        model4.populate(doc2, pop).then((res2) => {
           callback2(null, res2);
         }, (err2) => {
           callback2(err2);
@@ -70598,10 +70598,10 @@ var require_query = __commonJS({
       });
     };
     Query.prototype._completeMany = async function _completeMany(docs, fields, userProvidedFields, opts) {
-      const model2 = this.model;
+      const model4 = this.model;
       return Promise.all(docs.map((doc) => new Promise((resolve, reject) => {
         const rawDoc = doc;
-        doc = helpers.createModel(model2, doc, fields, userProvidedFields);
+        doc = helpers.createModel(model4, doc, fields, userProvidedFields);
         if (opts.session != null) {
           doc.$session(opts.session);
         }
@@ -70859,12 +70859,12 @@ var require_query = __commonJS({
       this._applyTranslateAliases(options);
       return this.mongooseCollection.deleteMany(this._conditions, options);
     };
-    function completeOne(model2, doc, res, options, fields, userProvidedFields, pop, callback2) {
+    function completeOne(model4, doc, res, options, fields, userProvidedFields, pop, callback2) {
       if (options.includeResultMetadata && doc == null) {
         _init(null);
         return null;
       }
-      helpers.createModelAndInit(model2, doc, fields, userProvidedFields, options, pop, _init);
+      helpers.createModelAndInit(model4, doc, fields, userProvidedFields, options, pop, _init);
       function _init(err, casted) {
         if (err) {
           return immediate(() => callback2(err));
@@ -71655,12 +71655,12 @@ var require_query = __commonJS({
         _getPopulatedPaths(list, pop.populate, prefix + pop.path + ".");
       }
     }
-    Query.prototype.cast = function(model2, obj) {
+    Query.prototype.cast = function(model4, obj) {
       obj || (obj = this._conditions);
-      model2 = model2 || this.model;
-      const discriminatorKey = model2.schema.options.discriminatorKey;
+      model4 = model4 || this.model;
+      const discriminatorKey = model4.schema.options.discriminatorKey;
       if (obj != null && obj.hasOwnProperty(discriminatorKey)) {
-        model2 = getDiscriminatorByValue(model2.discriminators, obj[discriminatorKey]) || model2;
+        model4 = getDiscriminatorByValue(model4.discriminators, obj[discriminatorKey]) || model4;
       }
       const opts = { upsert: this.options && this.options.upsert };
       if (this.options) {
@@ -71672,10 +71672,10 @@ var require_query = __commonJS({
         }
       }
       try {
-        return cast(model2.schema, obj, opts, this);
+        return cast(model4.schema, obj, opts, this);
       } catch (err) {
         if (typeof err.setModel === "function") {
-          err.setModel(model2);
+          err.setModel(model4);
         }
         throw err;
       }
@@ -71850,28 +71850,28 @@ var require_aggregationCursor = __commonJS({
       this.cursor = null;
       this.agg = agg;
       this._transforms = [];
-      const model2 = agg._model;
+      const model4 = agg._model;
       delete agg.options.cursor.useMongooseAggCursor;
       this._mongooseOptions = {};
-      _init(model2, this, agg);
+      _init(model4, this, agg);
     }
     util2.inherits(AggregationCursor, Readable);
-    function _init(model2, c, agg) {
-      if (!model2.collection.buffer) {
-        model2.hooks.execPre("aggregate", agg, function() {
+    function _init(model4, c, agg) {
+      if (!model4.collection.buffer) {
+        model4.hooks.execPre("aggregate", agg, function() {
           if (typeof agg.options?.cursor?.transform === "function") {
             c._transforms.push(agg.options.cursor.transform);
           }
-          c.cursor = model2.collection.aggregate(agg._pipeline, agg.options || {});
+          c.cursor = model4.collection.aggregate(agg._pipeline, agg.options || {});
           c.emit("cursor", c.cursor);
         });
       } else {
-        model2.collection.emitter.once("queue", function() {
-          model2.hooks.execPre("aggregate", agg, function() {
+        model4.collection.emitter.once("queue", function() {
+          model4.hooks.execPre("aggregate", agg, function() {
             if (typeof agg.options?.cursor?.transform === "function") {
               c._transforms.push(agg.options.cursor.transform);
             }
-            c.cursor = model2.collection.aggregate(agg._pipeline, agg.options || {});
+            c.cursor = model4.collection.aggregate(agg._pipeline, agg.options || {});
             c.emit("cursor", c.cursor);
           });
         });
@@ -72122,29 +72122,29 @@ var require_aggregate2 = __commonJS({
     var read = Query.prototype.read;
     var readConcern = Query.prototype.readConcern;
     var validRedactStringValues = /* @__PURE__ */ new Set(["$$DESCEND", "$$PRUNE", "$$KEEP"]);
-    function Aggregate(pipeline, model2) {
+    function Aggregate(pipeline, model4) {
       this._pipeline = [];
-      this._model = model2;
+      this._model = model4;
       this.options = {};
       if (arguments.length === 1 && Array.isArray(pipeline)) {
         this.append.apply(this, pipeline);
       }
     }
     Aggregate.prototype.options;
-    Aggregate.prototype.model = function(model2) {
+    Aggregate.prototype.model = function(model4) {
       if (arguments.length === 0) {
         return this._model;
       }
-      this._model = model2;
-      if (model2.schema != null) {
-        if (this.options.readPreference == null && model2.schema.options.read != null) {
-          this.options.readPreference = model2.schema.options.read;
+      this._model = model4;
+      if (model4.schema != null) {
+        if (this.options.readPreference == null && model4.schema.options.read != null) {
+          this.options.readPreference = model4.schema.options.read;
         }
-        if (this.options.collation == null && model2.schema.options.collation != null) {
-          this.options.collation = model2.schema.options.collation;
+        if (this.options.collation == null && model4.schema.options.collation != null) {
+          this.options.collation = model4.schema.options.collation;
         }
       }
-      return model2;
+      return model4;
     };
     Aggregate.prototype.append = function() {
       const args = arguments.length === 1 && Array.isArray(arguments[0]) ? arguments[0] : [...arguments];
@@ -72316,16 +72316,16 @@ var require_aggregate2 = __commonJS({
       if (typeof verbosity === "function" || typeof arguments[1] === "function") {
         throw new MongooseError("Aggregate.prototype.explain() no longer accepts a callback");
       }
-      const model2 = this._model;
+      const model4 = this._model;
       if (!this._pipeline.length) {
         throw new Error("Aggregate has empty pipeline");
       }
       prepareDiscriminatorPipeline(this._pipeline, this._model.schema);
       await new Promise((resolve, reject) => {
-        model2.hooks.execPre("aggregate", this, (error) => {
+        model4.hooks.execPre("aggregate", this, (error) => {
           if (error) {
             const _opts2 = { error };
-            return model2.hooks.execPost("aggregate", this, [null], _opts2, (error2) => {
+            return model4.hooks.execPost("aggregate", this, [null], _opts2, (error2) => {
               reject(error2);
             });
           } else {
@@ -72333,7 +72333,7 @@ var require_aggregate2 = __commonJS({
           }
         });
       });
-      const cursor = model2.collection.aggregate(this._pipeline, this.options);
+      const cursor = model4.collection.aggregate(this._pipeline, this.options);
       if (verbosity == null) {
         verbosity = true;
       }
@@ -72343,7 +72343,7 @@ var require_aggregate2 = __commonJS({
       } catch (error) {
         await new Promise((resolve, reject) => {
           const _opts2 = { error };
-          model2.hooks.execPost("aggregate", this, [null], _opts2, (error2) => {
+          model4.hooks.execPost("aggregate", this, [null], _opts2, (error2) => {
             if (error2) {
               return reject(error2);
             }
@@ -72353,7 +72353,7 @@ var require_aggregate2 = __commonJS({
       }
       const _opts = { error: null };
       await new Promise((resolve, reject) => {
-        model2.hooks.execPost("aggregate", this, [result], _opts, (error) => {
+        model4.hooks.execPost("aggregate", this, [result], _opts, (error) => {
           if (error) {
             return reject(error);
           }
@@ -72408,20 +72408,20 @@ var require_aggregate2 = __commonJS({
       if (typeof arguments[0] === "function") {
         throw new MongooseError("Aggregate.prototype.exec() no longer accepts a callback");
       }
-      const model2 = this._model;
+      const model4 = this._model;
       const collection = this._model.collection;
-      applyGlobalMaxTimeMS(this.options, model2.db.options, model2.base.options);
-      applyGlobalDiskUse(this.options, model2.db.options, model2.base.options);
+      applyGlobalMaxTimeMS(this.options, model4.db.options, model4.base.options);
+      applyGlobalDiskUse(this.options, model4.db.options, model4.base.options);
       if (this.options && this.options.cursor) {
         return new AggregationCursor(this);
       }
       prepareDiscriminatorPipeline(this._pipeline, this._model.schema);
       stringifyFunctionOperators(this._pipeline);
       await new Promise((resolve, reject) => {
-        model2.hooks.execPre("aggregate", this, (error) => {
+        model4.hooks.execPre("aggregate", this, (error) => {
           if (error) {
             const _opts2 = { error };
-            return model2.hooks.execPost("aggregate", this, [null], _opts2, (error2) => {
+            return model4.hooks.execPost("aggregate", this, [null], _opts2, (error2) => {
               reject(error2);
             });
           } else {
@@ -72440,7 +72440,7 @@ var require_aggregate2 = __commonJS({
       } catch (error) {
         await new Promise((resolve, reject) => {
           const _opts2 = { error };
-          model2.hooks.execPost("aggregate", this, [null], _opts2, (error2) => {
+          model4.hooks.execPost("aggregate", this, [null], _opts2, (error2) => {
             if (error2) {
               return reject(error2);
             }
@@ -72450,7 +72450,7 @@ var require_aggregate2 = __commonJS({
       }
       const _opts = { error: null };
       await new Promise((resolve, reject) => {
-        model2.hooks.execPost("aggregate", this, [result], _opts, (error) => {
+        model4.hooks.execPost("aggregate", this, [result], _opts, (error) => {
           if (error) {
             return reject(error);
           }
@@ -72558,10 +72558,10 @@ var require_applyMethods = __commonJS({
     "use strict";
     var get = require_get();
     var utils = require_utils6();
-    module2.exports = function applyMethods(model2, schema) {
+    module2.exports = function applyMethods(model4, schema) {
       const Model = require_model();
       function apply(method, schema2) {
-        Object.defineProperty(model2.prototype, method, {
+        Object.defineProperty(model4.prototype, method, {
           get: function() {
             const h = {};
             for (const k in schema2.methods[method]) {
@@ -72585,12 +72585,12 @@ var require_applyMethods = __commonJS({
           utils.warn(`mongoose: the method name "${method}" is used by mongoose internally, overwriting it may cause bugs. If you're sure you know what you're doing, you can suppress this error by using \`schema.method('${method}', fn, { suppressWarning: true })\`.`);
         }
         if (typeof fn === "function") {
-          model2.prototype[method] = fn;
+          model4.prototype[method] = fn;
         } else {
           apply(method, schema);
         }
       }
-      model2.$appliedMethods = true;
+      model4.$appliedMethods = true;
       for (const key of Object.keys(schema.paths)) {
         const type = schema.paths[key];
         if (type.$isSingleNested && !type.caster.$appliedMethods) {
@@ -72717,7 +72717,7 @@ var require_applyStaticHooks = __commonJS({
     "use strict";
     var middlewareFunctions = require_constants4().queryMiddlewareFunctions;
     var promiseOrCallback = require_promiseOrCallback();
-    module2.exports = function applyStaticHooks(model2, hooks, statics) {
+    module2.exports = function applyStaticHooks(model4, hooks, statics) {
       const kareemOptions = {
         useErrorHandlers: true,
         numCallbackParams: 1
@@ -72728,27 +72728,27 @@ var require_applyStaticHooks = __commonJS({
         }
         return hook.model !== false;
       });
-      model2.$__insertMany = hooks.createWrapper(
+      model4.$__insertMany = hooks.createWrapper(
         "insertMany",
-        model2.$__insertMany,
-        model2,
+        model4.$__insertMany,
+        model4,
         kareemOptions
       );
       for (const key of Object.keys(statics)) {
         if (hooks.hasHooks(key)) {
-          const original = model2[key];
-          model2[key] = function() {
+          const original = model4[key];
+          model4[key] = function() {
             const numArgs = arguments.length;
             const lastArg = numArgs > 0 ? arguments[numArgs - 1] : null;
             const cb = typeof lastArg === "function" ? lastArg : null;
             const args = Array.prototype.slice.call(arguments, 0, cb == null ? numArgs : numArgs - 1);
             return promiseOrCallback(cb, (callback2) => {
-              hooks.execPre(key, model2, args, function(err) {
+              hooks.execPre(key, model4, args, function(err) {
                 if (err != null) {
                   return callback2(err);
                 }
                 let postCalled = 0;
-                const ret = original.apply(model2, args.concat(post));
+                const ret = original.apply(model4, args.concat(post));
                 if (ret != null && typeof ret.then === "function") {
                   ret.then((res) => post(null, res), (err2) => post(err2));
                 }
@@ -72759,7 +72759,7 @@ var require_applyStaticHooks = __commonJS({
                   if (error != null) {
                     return callback2(error);
                   }
-                  hooks.execPost(key, model2, [res], function(error2) {
+                  hooks.execPost(key, model4, [res], function(error2) {
                     if (error2 != null) {
                       return callback2(error2);
                     }
@@ -72767,7 +72767,7 @@ var require_applyStaticHooks = __commonJS({
                   });
                 }
               });
-            }, model2.events);
+            }, model4.events);
           };
         }
       }
@@ -72779,9 +72779,9 @@ var require_applyStaticHooks = __commonJS({
 var require_applyStatics = __commonJS({
   "../../node_modules/.pnpm/mongoose@8.2.4/node_modules/mongoose/lib/helpers/model/applyStatics.js"(exports, module2) {
     "use strict";
-    module2.exports = function applyStatics(model2, schema) {
+    module2.exports = function applyStatics(model4, schema) {
       for (const i in schema.statics) {
-        model2[i] = schema.statics[i];
+        model4[i] = schema.statics[i];
       }
     };
   }
@@ -74122,15 +74122,15 @@ var require_castBulkWrite = __commonJS({
       const globalSetDefaultsOnInsert = originalModel.base.options.setDefaultsOnInsert;
       if (op["insertOne"]) {
         return (callback2) => {
-          const model2 = decideModelByObject(originalModel, op["insertOne"]["document"]);
-          const doc = new model2(op["insertOne"]["document"]);
-          if (model2.schema.options.timestamps && options.timestamps !== false) {
+          const model4 = decideModelByObject(originalModel, op["insertOne"]["document"]);
+          const doc = new model4(op["insertOne"]["document"]);
+          if (model4.schema.options.timestamps && options.timestamps !== false) {
             doc.initializeTimestamps();
           }
           if (options.session != null) {
             doc.$session(options.session);
           }
-          const versionKey = model2?.schema?.options?.versionKey;
+          const versionKey = model4?.schema?.options?.versionKey;
           if (versionKey && doc[versionKey] == null) {
             doc[versionKey] = 0;
           }
@@ -74157,22 +74157,22 @@ var require_castBulkWrite = __commonJS({
             if (!op["updateOne"]["update"]) {
               throw new Error("Must provide an update object.");
             }
-            const model2 = decideModelByObject(originalModel, op["updateOne"]["filter"]);
-            const schema = model2.schema;
-            const strict = options.strict != null ? options.strict : model2.schema.options.strict;
+            const model4 = decideModelByObject(originalModel, op["updateOne"]["filter"]);
+            const schema = model4.schema;
+            const strict = options.strict != null ? options.strict : model4.schema.options.strict;
             const update = clone(op["updateOne"]["update"]);
             _addDiscriminatorToObject(schema, op["updateOne"]["filter"]);
-            if (model2.schema.$timestamps != null && op["updateOne"].timestamps !== false) {
-              const createdAt = model2.schema.$timestamps.createdAt;
-              const updatedAt = model2.schema.$timestamps.updatedAt;
+            if (model4.schema.$timestamps != null && op["updateOne"].timestamps !== false) {
+              const createdAt = model4.schema.$timestamps.createdAt;
+              const updatedAt = model4.schema.$timestamps.updatedAt;
               applyTimestampsToUpdate(now, createdAt, updatedAt, update, {});
             }
             if (op["updateOne"].timestamps !== false) {
-              applyTimestampsToChildren(now, update, model2.schema);
+              applyTimestampsToChildren(now, update, model4.schema);
             }
             const shouldSetDefaultsOnInsert = op["updateOne"].setDefaultsOnInsert == null ? globalSetDefaultsOnInsert : op["updateOne"].setDefaultsOnInsert;
             if (shouldSetDefaultsOnInsert !== false) {
-              setDefaultsOnInsert(op["updateOne"]["filter"], model2.schema, update, {
+              setDefaultsOnInsert(op["updateOne"]["filter"], model4.schema, update, {
                 setDefaultsOnInsert: true,
                 upsert: op["updateOne"].upsert
               });
@@ -74180,16 +74180,16 @@ var require_castBulkWrite = __commonJS({
             decorateUpdateWithVersionKey(
               update,
               op["updateOne"],
-              model2.schema.options.versionKey
+              model4.schema.options.versionKey
             );
-            op["updateOne"]["filter"] = cast(model2.schema, op["updateOne"]["filter"], {
+            op["updateOne"]["filter"] = cast(model4.schema, op["updateOne"]["filter"], {
               strict,
               upsert: op["updateOne"].upsert
             });
-            op["updateOne"]["update"] = castUpdate(model2.schema, update, {
+            op["updateOne"]["update"] = castUpdate(model4.schema, update, {
               strict,
               upsert: op["updateOne"].upsert
-            }, model2, op["updateOne"]["filter"]);
+            }, model4, op["updateOne"]["filter"]);
           } catch (error) {
             return callback2(error, null);
           }
@@ -74204,38 +74204,38 @@ var require_castBulkWrite = __commonJS({
             if (!op["updateMany"]["update"]) {
               throw new Error("Must provide an update object.");
             }
-            const model2 = decideModelByObject(originalModel, op["updateMany"]["filter"]);
-            const schema = model2.schema;
-            const strict = options.strict != null ? options.strict : model2.schema.options.strict;
+            const model4 = decideModelByObject(originalModel, op["updateMany"]["filter"]);
+            const schema = model4.schema;
+            const strict = options.strict != null ? options.strict : model4.schema.options.strict;
             const shouldSetDefaultsOnInsert = op["updateMany"].setDefaultsOnInsert == null ? globalSetDefaultsOnInsert : op["updateMany"].setDefaultsOnInsert;
             if (shouldSetDefaultsOnInsert !== false) {
-              setDefaultsOnInsert(op["updateMany"]["filter"], model2.schema, op["updateMany"]["update"], {
+              setDefaultsOnInsert(op["updateMany"]["filter"], model4.schema, op["updateMany"]["update"], {
                 setDefaultsOnInsert: true,
                 upsert: op["updateMany"].upsert
               });
             }
-            if (model2.schema.$timestamps != null && op["updateMany"].timestamps !== false) {
-              const createdAt = model2.schema.$timestamps.createdAt;
-              const updatedAt = model2.schema.$timestamps.updatedAt;
+            if (model4.schema.$timestamps != null && op["updateMany"].timestamps !== false) {
+              const createdAt = model4.schema.$timestamps.createdAt;
+              const updatedAt = model4.schema.$timestamps.updatedAt;
               applyTimestampsToUpdate(now, createdAt, updatedAt, op["updateMany"]["update"], {});
             }
             if (op["updateMany"].timestamps !== false) {
-              applyTimestampsToChildren(now, op["updateMany"]["update"], model2.schema);
+              applyTimestampsToChildren(now, op["updateMany"]["update"], model4.schema);
             }
             _addDiscriminatorToObject(schema, op["updateMany"]["filter"]);
             decorateUpdateWithVersionKey(
               op["updateMany"]["update"],
               op["updateMany"],
-              model2.schema.options.versionKey
+              model4.schema.options.versionKey
             );
-            op["updateMany"]["filter"] = cast(model2.schema, op["updateMany"]["filter"], {
+            op["updateMany"]["filter"] = cast(model4.schema, op["updateMany"]["filter"], {
               strict,
               upsert: op["updateMany"].upsert
             });
-            op["updateMany"]["update"] = castUpdate(model2.schema, op["updateMany"]["update"], {
+            op["updateMany"]["update"] = castUpdate(model4.schema, op["updateMany"]["update"], {
               strict,
               upsert: op["updateMany"].upsert
-            }, model2, op["updateMany"]["filter"]);
+            }, model4, op["updateMany"]["filter"]);
           } catch (error) {
             return callback2(error, null);
           }
@@ -74243,26 +74243,26 @@ var require_castBulkWrite = __commonJS({
         };
       } else if (op["replaceOne"]) {
         return (callback2) => {
-          const model2 = decideModelByObject(originalModel, op["replaceOne"]["filter"]);
-          const schema = model2.schema;
-          const strict = options.strict != null ? options.strict : model2.schema.options.strict;
+          const model4 = decideModelByObject(originalModel, op["replaceOne"]["filter"]);
+          const schema = model4.schema;
+          const strict = options.strict != null ? options.strict : model4.schema.options.strict;
           _addDiscriminatorToObject(schema, op["replaceOne"]["filter"]);
           try {
-            op["replaceOne"]["filter"] = cast(model2.schema, op["replaceOne"]["filter"], {
+            op["replaceOne"]["filter"] = cast(model4.schema, op["replaceOne"]["filter"], {
               strict,
               upsert: op["replaceOne"].upsert
             });
           } catch (error) {
             return callback2(error, null);
           }
-          const doc = new model2(op["replaceOne"]["replacement"], strict, true);
-          if (model2.schema.options.timestamps) {
+          const doc = new model4(op["replaceOne"]["replacement"], strict, true);
+          if (model4.schema.options.timestamps) {
             doc.initializeTimestamps();
           }
           if (options.session != null) {
             doc.$session(options.session);
           }
-          const versionKey = model2?.schema?.options?.versionKey;
+          const versionKey = model4?.schema?.options?.versionKey;
           if (versionKey && doc[versionKey] == null) {
             doc[versionKey] = 0;
           }
@@ -74284,12 +74284,12 @@ var require_castBulkWrite = __commonJS({
         };
       } else if (op["deleteOne"]) {
         return (callback2) => {
-          const model2 = decideModelByObject(originalModel, op["deleteOne"]["filter"]);
-          const schema = model2.schema;
+          const model4 = decideModelByObject(originalModel, op["deleteOne"]["filter"]);
+          const schema = model4.schema;
           _addDiscriminatorToObject(schema, op["deleteOne"]["filter"]);
           try {
             op["deleteOne"]["filter"] = cast(
-              model2.schema,
+              model4.schema,
               op["deleteOne"]["filter"]
             );
           } catch (error) {
@@ -74299,12 +74299,12 @@ var require_castBulkWrite = __commonJS({
         };
       } else if (op["deleteMany"]) {
         return (callback2) => {
-          const model2 = decideModelByObject(originalModel, op["deleteMany"]["filter"]);
-          const schema = model2.schema;
+          const model4 = decideModelByObject(originalModel, op["deleteMany"]["filter"]);
+          const schema = model4.schema;
           _addDiscriminatorToObject(schema, op["deleteMany"]["filter"]);
           try {
             op["deleteMany"]["filter"] = cast(
-              model2.schema,
+              model4.schema,
               op["deleteMany"]["filter"]
             );
           } catch (error) {
@@ -74327,12 +74327,12 @@ var require_castBulkWrite = __commonJS({
         obj[schema.discriminatorMapping.key] = schema.discriminatorMapping.value;
       }
     }
-    function decideModelByObject(model2, object) {
-      const discriminatorKey = model2.schema.options.discriminatorKey;
+    function decideModelByObject(model4, object) {
+      const discriminatorKey = model4.schema.options.discriminatorKey;
       if (object != null && object.hasOwnProperty(discriminatorKey)) {
-        model2 = getDiscriminatorByValue(model2.discriminators, object[discriminatorKey]) || model2;
+        model4 = getDiscriminatorByValue(model4.discriminators, object[discriminatorKey]) || model4;
       }
-      return model2;
+      return model4;
     }
   }
 });
@@ -74345,11 +74345,11 @@ var require_createPopulateQueryFilter = __commonJS({
     var parentPaths = require_parentPaths();
     var { trusted } = require_trusted();
     var hasDollarKeys = require_hasDollarKeys();
-    module2.exports = function createPopulateQueryFilter(ids, _match, _foreignField, model2, skipInvalidIds) {
+    module2.exports = function createPopulateQueryFilter(ids, _match, _foreignField, model4, skipInvalidIds) {
       const match = _formatMatch(_match);
       if (_foreignField.size === 1) {
         const foreignField = Array.from(_foreignField)[0];
-        const foreignSchemaType = model2.schema.path(foreignField);
+        const foreignSchemaType = model4.schema.path(foreignField);
         if (foreignField !== "_id" || !match["_id"]) {
           ids = _filterInvalidIds(ids, foreignSchemaType, skipInvalidIds);
           match[foreignField] = trusted({ $in: ids });
@@ -74376,7 +74376,7 @@ var require_createPopulateQueryFilter = __commonJS({
         }
         for (const foreignField of _foreignField) {
           if (foreignField !== "_id" || !match["_id"]) {
-            const foreignSchemaType = model2.schema.path(foreignField);
+            const foreignSchemaType = model4.schema.path(foreignField);
             ids = _filterInvalidIds(ids, foreignSchemaType, skipInvalidIds);
             $or.push({ [foreignField]: { $in: ids } });
           } else if (foreignField === "_id" && match["_id"]) {
@@ -74468,20 +74468,20 @@ var require_getSchemaTypes = __commonJS({
     var leanPopulateMap = require_leanPopulateMap();
     var mpath = require_mpath();
     var populateModelSymbol = require_symbols().populateModelSymbol;
-    module2.exports = function getSchemaTypes(model2, schema, doc, path) {
+    module2.exports = function getSchemaTypes(model4, schema, doc, path) {
       const pathschema = schema.path(path);
       const topLevelDoc = doc;
       if (pathschema) {
         return pathschema;
       }
       const discriminatorKey = schema.discriminatorMapping && schema.discriminatorMapping.key;
-      if (discriminatorKey && model2 != null) {
+      if (discriminatorKey && model4 != null) {
         if (doc != null && doc[discriminatorKey] != null) {
-          const discriminator = getDiscriminatorByValue(model2.discriminators, doc[discriminatorKey]);
+          const discriminator = getDiscriminatorByValue(model4.discriminators, doc[discriminatorKey]);
           schema = discriminator ? discriminator.schema : schema;
-        } else if (model2.discriminators != null) {
-          return Object.keys(model2.discriminators).reduce((arr, name) => {
-            const disc = model2.discriminators[name];
+        } else if (model4.discriminators != null) {
+          return Object.keys(model4.discriminators).reduce((arr, name) => {
+            const disc = model4.discriminators[name];
             return arr.concat(getSchemaTypes(disc, disc.schema, null, path));
           }, []);
         }
@@ -74593,11 +74593,11 @@ var require_getSchemaTypes = __commonJS({
           }
           const fullPath = nestedPath.concat([trypath]).join(".");
           if (topLevelDoc != null && topLevelDoc.$__ && topLevelDoc.$populated(fullPath) && p < parts2.length) {
-            const model3 = doc.$__.populated[fullPath].options[populateModelSymbol];
-            if (model3 != null) {
+            const model5 = doc.$__.populated[fullPath].options[populateModelSymbol];
+            if (model5 != null) {
               const ret = search(
                 parts2.slice(p),
-                model3.schema,
+                model5.schema,
                 subdoc ? mpath.get(trypath, subdoc) : null,
                 nestedPath.concat(parts2.slice(0, p))
               );
@@ -74606,8 +74606,8 @@ var require_getSchemaTypes = __commonJS({
           }
           const _val = get(topLevelDoc, trypath);
           if (_val != null) {
-            const model3 = Array.isArray(_val) && _val.length > 0 ? leanPopulateMap.get(_val[0]) : leanPopulateMap.get(_val);
-            const schema3 = model3 != null ? model3.schema : null;
+            const model5 = Array.isArray(_val) && _val.length > 0 ? leanPopulateMap.get(_val[0]) : leanPopulateMap.get(_val);
+            const schema3 = model5 != null ? model5.schema : null;
             if (schema3 != null) {
               const ret = search(
                 parts2.slice(p),
@@ -74742,7 +74742,7 @@ var require_getModelsMapForPopulate = __commonJS({
     var populateModelSymbol = require_symbols().populateModelSymbol;
     var schemaMixedSymbol = require_symbols2().schemaMixedSymbol;
     var StrictPopulate = require_strictPopulate();
-    module2.exports = function getModelsMapForPopulate(model2, docs, options) {
+    module2.exports = function getModelsMapForPopulate(model4, docs, options) {
       let doc;
       const len = docs.length;
       const map = [];
@@ -74751,16 +74751,16 @@ var require_getModelsMapForPopulate = __commonJS({
       let refPath;
       let modelNames;
       const available = {};
-      const modelSchema = model2.schema;
+      const modelSchema = model4.schema;
       if (options._localModel != null && options._localModel.schema.nested[options.path]) {
         return [];
       }
-      const _virtualRes = getVirtual(model2.schema, options.path);
+      const _virtualRes = getVirtual(model4.schema, options.path);
       const virtual = _virtualRes == null ? null : _virtualRes.virtual;
       if (virtual != null) {
-        return _virtualPopulate(model2, docs, options, _virtualRes);
+        return _virtualPopulate(model4, docs, options, _virtualRes);
       }
-      let allSchemaTypes = getSchemaTypes(model2, modelSchema, null, options.path);
+      let allSchemaTypes = getSchemaTypes(model4, modelSchema, null, options.path);
       allSchemaTypes = Array.isArray(allSchemaTypes) ? allSchemaTypes : [allSchemaTypes].filter((v) => v != null);
       const isStrictPopulateDisabled = options.strictPopulate === false || options.options?.strictPopulate === false;
       if (!isStrictPopulateDisabled && allSchemaTypes.length === 0 && options._localModel != null) {
@@ -74770,7 +74770,7 @@ var require_getModelsMapForPopulate = __commonJS({
         doc = docs[i];
         let justOne = null;
         const docSchema = doc != null && doc.$__ != null ? doc.$__schema : modelSchema;
-        schema = getSchemaTypes(model2, docSchema, doc, options.path);
+        schema = getSchemaTypes(model4, docSchema, doc, options.path);
         if (schema != null && schema.$isMongooseDocumentArray && schema.options.ref == null && schema.options.refPath == null) {
           continue;
         }
@@ -74790,10 +74790,10 @@ var require_getModelsMapForPopulate = __commonJS({
               foreignField: "_id",
               justOne: true
             };
-            const res = _getModelNames(doc, schema, modelNameFromQuery, model2);
+            const res = _getModelNames(doc, schema, modelNameFromQuery, model4);
             const unpopulatedValue = mpath.get(options.path, doc);
             const id2 = mpath.get("_id", unpopulatedValue);
-            addModelNamesToMap(model2, map, available, res.modelNames, options, data2, id2, doc, schemaOptions, unpopulatedValue);
+            addModelNamesToMap(model4, map, available, res.modelNames, options, data2, id2, doc, schemaOptions, unpopulatedValue);
           }
           continue;
         }
@@ -74803,7 +74803,7 @@ var require_getModelsMapForPopulate = __commonJS({
             let _modelNames;
             let res;
             try {
-              res = _getModelNames(doc, _schema, modelNameFromQuery, model2);
+              res = _getModelNames(doc, _schema, modelNameFromQuery, model4);
               _modelNames = res.modelNames;
               isRefPath = isRefPath || res.isRefPath;
               normalizedRefPath = normalizedRefPath || res.refPath;
@@ -74826,7 +74826,7 @@ var require_getModelsMapForPopulate = __commonJS({
           }
         } else {
           try {
-            const res = _getModelNames(doc, schema, modelNameFromQuery, model2);
+            const res = _getModelNames(doc, schema, modelNameFromQuery, model4);
             modelNames = res.modelNames;
             isRefPath = res.isRefPath;
             normalizedRefPath = normalizedRefPath || res.refPath;
@@ -74860,7 +74860,7 @@ var require_getModelsMapForPopulate = __commonJS({
         data.justOne = justOne;
         data.localField = localField;
         data.foreignField = foreignField;
-        const ret = _getLocalFieldValues(doc, localField, model2, options, null, schema);
+        const ret = _getLocalFieldValues(doc, localField, model4, options, null, schema);
         const id = String(utils.getValue(foreignField, doc));
         options._docs[id] = Array.isArray(ret) ? ret.slice() : ret;
         let match = get(options, "match", null);
@@ -74884,13 +74884,13 @@ var require_getModelsMapForPopulate = __commonJS({
           modelNames = embeddedDiscriminatorModelNames || modelNames;
         }
         try {
-          addModelNamesToMap(model2, map, available, modelNames, options, data, ret, doc, schemaOptions);
+          addModelNamesToMap(model4, map, available, modelNames, options, data, ret, doc, schemaOptions);
         } catch (err) {
           return err;
         }
       }
       return map;
-      function _getModelNames(doc2, schema2, modelNameFromQuery2, model3) {
+      function _getModelNames(doc2, schema2, modelNameFromQuery2, model5) {
         let modelNames2;
         let isRefPath = false;
         let justOne = null;
@@ -74928,15 +74928,15 @@ var require_getModelsMapForPopulate = __commonJS({
           let refPath2;
           let schemaForCurrentDoc;
           let discriminatorValue;
-          let modelForCurrentDoc = model3;
-          const discriminatorKey = model3.schema.options.discriminatorKey;
+          let modelForCurrentDoc = model5;
+          const discriminatorKey = model5.schema.options.discriminatorKey;
           if (!schema2 && discriminatorKey && (discriminatorValue = utils.getValue(discriminatorKey, doc2))) {
-            const discriminatorModel = getDiscriminatorByValue(model3.discriminators, discriminatorValue) || model3;
+            const discriminatorModel = getDiscriminatorByValue(model5.discriminators, discriminatorValue) || model5;
             if (discriminatorModel != null) {
               modelForCurrentDoc = discriminatorModel;
             } else {
               try {
-                modelForCurrentDoc = _getModelFromConn(model3.db, discriminatorValue);
+                modelForCurrentDoc = _getModelFromConn(model5.db, discriminatorValue);
               } catch (error) {
                 return error;
               }
@@ -74990,7 +74990,7 @@ var require_getModelsMapForPopulate = __commonJS({
         }
         if (!modelNames2) {
           if (options._localModel == null) {
-            modelNames2 = [model3.modelName];
+            modelNames2 = [model5.modelName];
           } else {
             return { modelNames: modelNames2, justOne, isRefPath, refPath };
           }
@@ -75001,7 +75001,7 @@ var require_getModelsMapForPopulate = __commonJS({
         return { modelNames: modelNames2, justOne, isRefPath, refPath };
       }
     };
-    function _virtualPopulate(model2, docs, options, _virtualRes) {
+    function _virtualPopulate(model4, docs, options, _virtualRes) {
       const map = [];
       const available = {};
       const virtual = _virtualRes.virtual;
@@ -75031,7 +75031,7 @@ var require_getModelsMapForPopulate = __commonJS({
         }
         let foreignField = virtual.options.foreignField;
         if (!localField || !foreignField) {
-          return new MongooseError(`Cannot populate virtual \`${options.path}\` on model \`${model2.modelName}\`, because options \`localField\` and / or \`foreignField\` are missing`);
+          return new MongooseError(`Cannot populate virtual \`${options.path}\` on model \`${model4.modelName}\`, because options \`localField\` and / or \`foreignField\` are missing`);
         }
         if (typeof localField === "function") {
           localField = localField.call(doc, doc);
@@ -75074,7 +75074,7 @@ var require_getModelsMapForPopulate = __commonJS({
         if (Array.isArray(localField) && Array.isArray(foreignField) && localField.length === foreignField.length) {
           match = Object.assign({}, match);
           for (let i = 1; i < localField.length; ++i) {
-            match[foreignField[i]] = convertTo_id(mpath.get(localField[i], doc, lookupLocalFields), model2.schema);
+            match[foreignField[i]] = convertTo_id(mpath.get(localField[i], doc, lookupLocalFields), model4.schema);
             hasMatchFunction = true;
           }
           localField = localField[0];
@@ -75084,17 +75084,17 @@ var require_getModelsMapForPopulate = __commonJS({
         data.foreignField = foreignField;
         data.match = match;
         data.hasMatchFunction = hasMatchFunction;
-        const ret = _getLocalFieldValues(doc, localField, model2, options, virtual);
+        const ret = _getLocalFieldValues(doc, localField, model4, options, virtual);
         try {
-          addModelNamesToMap(model2, map, available, modelNames, options, data, ret, doc);
+          addModelNamesToMap(model4, map, available, modelNames, options, data, ret, doc);
         } catch (err) {
           return err;
         }
       }
       return map;
     }
-    function addModelNamesToMap(model2, map, available, modelNames, options, data, ret, doc, schemaOptions, unpopulatedValue) {
-      const connection = options.connection != null ? options.connection : model2.db;
+    function addModelNamesToMap(model4, map, available, modelNames, options, data, ret, doc, schemaOptions, unpopulatedValue) {
+      const connection = options.connection != null ? options.connection : model4.db;
       unpopulatedValue = unpopulatedValue === void 0 ? ret : unpopulatedValue;
       if (Array.isArray(unpopulatedValue)) {
         unpopulatedValue = utils.cloneArrays(unpopulatedValue);
@@ -75185,15 +75185,15 @@ var require_getModelsMapForPopulate = __commonJS({
       }
       return ref;
     }
-    function _getLocalFieldValues(doc, localField, model2, options, virtual, schema) {
-      const localFieldPathType = model2.schema._getPathType(localField);
-      const localFieldPath = localFieldPathType === "real" ? model2.schema.path(localField) : localFieldPathType.schema;
+    function _getLocalFieldValues(doc, localField, model4, options, virtual, schema) {
+      const localFieldPathType = model4.schema._getPathType(localField);
+      const localFieldPath = localFieldPathType === "real" ? model4.schema.path(localField) : localFieldPathType.schema;
       const localFieldGetters = localFieldPath && localFieldPath.getters ? localFieldPath.getters : [];
       localField = localFieldPath != null && localFieldPath.instance === "Embedded" ? localField + "._id" : localField;
       const _populateOptions = get(options, "options", {});
       const getters = "getters" in _populateOptions ? _populateOptions.getters : get(virtual, "options.getters", false);
       if (localFieldGetters.length !== 0 && getters) {
-        const hydratedDoc = doc.$__ != null ? doc : model2.hydrate(doc);
+        const hydratedDoc = doc.$__ != null ? doc : model4.hydrate(doc);
         const localFieldValue = utils.getValue(localField, doc);
         if (Array.isArray(localFieldValue)) {
           const localFieldHydratedValue = utils.getValue(localField.split(".").slice(0, -1), hydratedDoc);
@@ -75378,18 +75378,18 @@ var require_getRelatedIndexes = __commonJS({
   "../../node_modules/.pnpm/mongoose@8.2.4/node_modules/mongoose/lib/helpers/indexes/getRelatedIndexes.js"(exports, module2) {
     "use strict";
     var hasDollarKeys = require_hasDollarKeys();
-    function getRelatedSchemaIndexes(model2, schemaIndexes) {
+    function getRelatedSchemaIndexes(model4, schemaIndexes) {
       return getRelatedIndexes({
-        baseModelName: model2.baseModelName,
-        discriminatorMapping: model2.schema.discriminatorMapping,
+        baseModelName: model4.baseModelName,
+        discriminatorMapping: model4.schema.discriminatorMapping,
         indexes: schemaIndexes,
         indexesType: "schema"
       });
     }
-    function getRelatedDBIndexes(model2, dbIndexes) {
+    function getRelatedDBIndexes(model4, dbIndexes) {
       return getRelatedIndexes({
-        baseModelName: model2.baseModelName,
-        discriminatorMapping: model2.schema.discriminatorMapping,
+        baseModelName: model4.baseModelName,
+        discriminatorMapping: model4.schema.discriminatorMapping,
         indexes: dbIndexes,
         indexesType: "db"
       });
@@ -76195,11 +76195,11 @@ var require_model = __commonJS({
       return query;
     };
     Model.discriminator = function(name, schema, options) {
-      let model2;
+      let model4;
       if (typeof name === "function") {
-        model2 = name;
-        name = utils.getFunctionName(model2);
-        if (!(model2.prototype instanceof Model)) {
+        model4 = name;
+        name = utils.getFunctionName(model4);
+        if (!(model4.prototype instanceof Model)) {
           throw new MongooseError("The provided class " + name + " must extend Model");
         }
       }
@@ -76220,8 +76220,8 @@ var require_model = __commonJS({
       }
       schema.$isRootDiscriminator = true;
       schema.$globalPluginsApplied = true;
-      model2 = this.db.model(model2 || name, schema, this.$__collection.name);
-      this.discriminators[name] = model2;
+      model4 = this.db.model(model4 || name, schema, this.$__collection.name);
+      this.discriminators[name] = model4;
       const d = this.discriminators[name];
       Object.setPrototypeOf(d.prototype, this.prototype);
       Object.defineProperty(d, "baseModelName", {
@@ -76234,7 +76234,7 @@ var require_model = __commonJS({
       if (this[subclassedSymbol] != null) {
         for (const submodel of this[subclassedSymbol]) {
           submodel.discriminators = submodel.discriminators || {};
-          submodel.discriminators[name] = model2.__subclass(model2.db, schema, submodel.collection.name);
+          submodel.discriminators[name] = model4.__subclass(model4.db, schema, submodel.collection.name);
         }
       }
       return d;
@@ -76394,17 +76394,17 @@ var require_model = __commonJS({
       if (typeof arguments[0] === "function" || typeof arguments[1] === "function") {
         throw new MongooseError("Model.syncIndexes() no longer accepts a callback");
       }
-      const model2 = this;
+      const model4 = this;
       try {
-        await model2.createCollection();
+        await model4.createCollection();
       } catch (err) {
         if (err != null && (err.name !== "MongoServerError" || err.code !== 48)) {
           throw err;
         }
       }
-      const diffIndexesResult = await model2.diffIndexes();
-      const dropped = await model2.cleanIndexes({ ...options, toDrop: diffIndexesResult.toDrop });
-      await model2.createIndexes({ ...options, toCreate: diffIndexesResult.toCreate });
+      const diffIndexesResult = await model4.diffIndexes();
+      const dropped = await model4.cleanIndexes({ ...options, toDrop: diffIndexesResult.toDrop });
+      await model4.createIndexes({ ...options, toCreate: diffIndexesResult.toCreate });
       return dropped;
     };
     Model.createSearchIndex = async function createSearchIndex(description) {
@@ -76423,8 +76423,8 @@ var require_model = __commonJS({
       if (typeof arguments[0] === "function" || typeof arguments[1] === "function") {
         throw new MongooseError("Model.syncIndexes() no longer accepts a callback");
       }
-      const model2 = this;
-      let dbIndexes = await model2.listIndexes().catch((err) => {
+      const model4 = this;
+      let dbIndexes = await model4.listIndexes().catch((err) => {
         if (err.codeName == "NamespaceNotFound") {
           return void 0;
         }
@@ -76433,9 +76433,9 @@ var require_model = __commonJS({
       if (dbIndexes === void 0) {
         dbIndexes = [];
       }
-      dbIndexes = getRelatedDBIndexes(model2, dbIndexes);
-      const schema = model2.schema;
-      const schemaIndexes = getRelatedSchemaIndexes(model2, schema.indexes());
+      dbIndexes = getRelatedDBIndexes(model4, dbIndexes);
+      const schema = model4.schema;
+      const schemaIndexes = getRelatedSchemaIndexes(model4, schema.indexes());
       const toDrop = getIndexesToDrop(schema, schemaIndexes, dbIndexes);
       const toCreate = getIndexesToCreate(schema, schemaIndexes, dbIndexes, toDrop);
       return { toDrop, toCreate };
@@ -76486,13 +76486,13 @@ var require_model = __commonJS({
       if (typeof arguments[0] === "function" || typeof arguments[1] === "function") {
         throw new MongooseError("Model.cleanIndexes() no longer accepts a callback");
       }
-      const model2 = this;
-      const collection = model2.$__collection;
+      const model4 = this;
+      const collection = model4.$__collection;
       if (Array.isArray(options && options.toDrop)) {
         const res2 = await _dropIndexes(options.toDrop, collection);
         return res2;
       }
-      const res = await model2.diffIndexes();
+      const res = await model4.diffIndexes();
       return await _dropIndexes(res.toDrop, collection);
     };
     async function _dropIndexes(toDrop, collection) {
@@ -76535,20 +76535,20 @@ var require_model = __commonJS({
       }
       return this.ensureIndexes(options);
     };
-    function _ensureIndexes(model2, options, callback2) {
-      const indexes = model2.schema.indexes();
+    function _ensureIndexes(model4, options, callback2) {
+      const indexes = model4.schema.indexes();
       let indexError;
       options = options || {};
       const done = function(err) {
-        if (err && !model2.$caught) {
-          model2.emit("error", err);
+        if (err && !model4.$caught) {
+          model4.emit("error", err);
         }
-        model2.emit("index", err || indexError);
+        model4.emit("index", err || indexError);
         callback2 && callback2(err || indexError);
       };
       for (const index of indexes) {
         if (isDefaultIdIndex(index)) {
-          utils.warn('mongoose: Cannot specify a custom index on `_id` for model name "' + model2.modelName + '", MongoDB does not allow overwriting the default `_id` index. See https://bit.ly/mongodb-id-index');
+          utils.warn('mongoose: Cannot specify a custom index on `_id` for model name "' + model4.modelName + '", MongoDB does not allow overwriting the default `_id` index. See https://bit.ly/mongodb-id-index');
         }
       }
       if (!indexes.length) {
@@ -76558,23 +76558,23 @@ var require_model = __commonJS({
         return;
       }
       const indexSingleDone = function(err, fields, options2, name) {
-        model2.emit("index-single-done", err, fields, options2, name);
+        model4.emit("index-single-done", err, fields, options2, name);
       };
       const indexSingleStart = function(fields, options2) {
-        model2.emit("index-single-start", fields, options2);
+        model4.emit("index-single-start", fields, options2);
       };
-      const baseSchema = model2.schema._baseSchema;
+      const baseSchema = model4.schema._baseSchema;
       const baseSchemaIndexes = baseSchema ? baseSchema.indexes() : [];
       immediate(function() {
-        if (options._automatic && !model2.collection.collection) {
-          model2.collection.addQueue(create, []);
+        if (options._automatic && !model4.collection.collection) {
+          model4.collection.addQueue(create, []);
         } else {
           create();
         }
       });
       function create() {
         if (options._automatic) {
-          if (model2.schema.options.autoIndex === false || model2.schema.options.autoIndex == null && model2.db.config.autoIndex === false) {
+          if (model4.schema.options.autoIndex === false || model4.schema.options.autoIndex == null && model4.db.config.autoIndex === false) {
             return done();
           }
         }
@@ -76591,9 +76591,9 @@ var require_model = __commonJS({
         const indexFields = clone(index[0]);
         const indexOptions = clone(index[1]);
         delete indexOptions._autoIndex;
-        decorateDiscriminatorIndexOptions(model2.schema, indexOptions);
-        applyWriteConcern(model2.schema, indexOptions);
-        applySchemaCollation(indexFields, indexOptions, model2.schema.options);
+        decorateDiscriminatorIndexOptions(model4.schema, indexOptions);
+        applyWriteConcern(model4.schema, indexOptions);
+        applySchemaCollation(indexFields, indexOptions, model4.schema.options);
         indexSingleStart(indexFields, options);
         if ("background" in options) {
           indexOptions.background = options.background;
@@ -76603,7 +76603,7 @@ var require_model = __commonJS({
             return done();
           }
         }
-        model2.collection.createIndex(indexFields, indexOptions).then(
+        model4.collection.createIndex(indexFields, indexOptions).then(
           (name) => {
             indexSingleDone(null, indexFields, indexOptions, name);
             create();
@@ -76612,8 +76612,8 @@ var require_model = __commonJS({
             if (!indexError) {
               indexError = err;
             }
-            if (!model2.$caught) {
-              model2.emit("error", err);
+            if (!model4.$caught) {
+              model4.emit("error", err);
             }
             indexSingleDone(err, indexFields, indexOptions);
             create();
@@ -77526,15 +77526,15 @@ var require_model = __commonJS({
       }
       return _update(this, "replaceOne", conditions, doc, options);
     };
-    function _update(model2, op, conditions, doc, options) {
-      const mq = new model2.Query({}, {}, model2, model2.collection);
+    function _update(model4, op, conditions, doc, options) {
+      const mq = new model4.Query({}, {}, model4, model4.collection);
       if (conditions instanceof Document) {
         conditions = conditions.toObject();
       } else {
         conditions = clone(conditions);
       }
       options = typeof options === "function" ? options : clone(options);
-      const versionKey = model2 && model2.schema && model2.schema.options && model2.schema.options.versionKey || null;
+      const versionKey = model4 && model4.schema && model4.schema.options && model4.schema.options.versionKey || null;
       decorateUpdateWithVersionKey(doc, options, versionKey);
       return mq[op](conditions, doc, options);
     }
@@ -77659,13 +77659,13 @@ var require_model = __commonJS({
         });
       });
     };
-    function _populate(model2, docs, paths, cache, callback2) {
+    function _populate(model4, docs, paths, cache, callback2) {
       let pending = paths.length;
       if (paths.length === 0) {
         return callback2(null, docs);
       }
       for (const path of paths) {
-        populate(model2, docs, path, next);
+        populate(model4, docs, path, next);
       }
       function next(err) {
         if (err) {
@@ -77679,15 +77679,15 @@ var require_model = __commonJS({
     }
     var excludeIdReg = /\s?-_id\s?/;
     var excludeIdRegGlobal = /\s?-_id\s?/g;
-    function populate(model2, docs, options, callback2) {
+    function populate(model4, docs, options, callback2) {
       const populateOptions = options;
       if (options.strictPopulate == null) {
         if (options._localModel != null && options._localModel.schema._userProvidedOptions.strictPopulate != null) {
           populateOptions.strictPopulate = options._localModel.schema._userProvidedOptions.strictPopulate;
-        } else if (options._localModel != null && model2.base.options.strictPopulate != null) {
-          populateOptions.strictPopulate = model2.base.options.strictPopulate;
-        } else if (model2.base.options.strictPopulate != null) {
-          populateOptions.strictPopulate = model2.base.options.strictPopulate;
+        } else if (options._localModel != null && model4.base.options.strictPopulate != null) {
+          populateOptions.strictPopulate = model4.base.options.strictPopulate;
+        } else if (model4.base.options.strictPopulate != null) {
+          populateOptions.strictPopulate = model4.base.options.strictPopulate;
         }
       }
       if (!Array.isArray(docs)) {
@@ -77696,7 +77696,7 @@ var require_model = __commonJS({
       if (docs.length === 0 || docs.every(utils.isNullOrUndefined)) {
         return callback2();
       }
-      const modelsMap = getModelsMapForPopulate(model2, docs, populateOptions);
+      const modelsMap = getModelsMapForPopulate(model4, docs, populateOptions);
       if (modelsMap instanceof MongooseError) {
         return immediate(function() {
           callback2(modelsMap);
@@ -77724,7 +77724,7 @@ var require_model = __commonJS({
         }
         if (ids.length === 0 || ids.every(utils.isNullOrUndefined)) {
           --_remaining;
-          _assign(model2, [], mod, assignmentOpts);
+          _assign(model4, [], mod, assignmentOpts);
           continue;
         }
         hasOne = true;
@@ -77758,7 +77758,7 @@ var require_model = __commonJS({
           const opts = utils.populate(populateOptions.populate).map((pop) => Object.assign({}, pop, {
             path: populateOptions.path + "." + pop.path
           }));
-          model2.populate(docs, opts).then((res) => {
+          model4.populate(docs, opts).then((res) => {
             callback2(null, res);
           }, (err) => {
             callback2(err);
@@ -77787,7 +77787,7 @@ var require_model = __commonJS({
             mod.options._childDocs.push(val);
           }
           try {
-            _assign(model2, vals, mod, assignmentOpts);
+            _assign(model4, vals, mod, assignmentOpts);
           } catch (err) {
             return callback2(err);
           }
@@ -77867,7 +77867,7 @@ var require_model = __commonJS({
         }
       );
     }
-    function _assign(model2, vals, mod, assignmentOpts) {
+    function _assign(model4, vals, mod, assignmentOpts) {
       const options = mod.options;
       const isVirtual = mod.isVirtual;
       const justOne = mod.justOne;
@@ -77935,7 +77935,7 @@ var require_model = __commonJS({
         }
       }
       assignVals({
-        originalModel: model2,
+        originalModel: model4,
         // If virtual, make sure to not mutate original field
         rawIds: mod.isVirtual ? allIds : mod.allIds,
         allIds,
@@ -77963,52 +77963,52 @@ var require_model = __commonJS({
         o[schema.options.versionKey] = Number;
         schema.add(o);
       }
-      let model2;
+      let model4;
       if (typeof name === "function" && name.prototype instanceof Model) {
-        model2 = name;
-        name = model2.name;
-        schema.loadClass(model2, false);
-        model2.prototype.$isMongooseModelPrototype = true;
+        model4 = name;
+        name = model4.name;
+        schema.loadClass(model4, false);
+        model4.prototype.$isMongooseModelPrototype = true;
       } else {
-        model2 = function model3(doc, fields, skipId) {
-          model3.hooks.execPreSync("createModel", doc);
-          if (!(this instanceof model3)) {
-            return new model3(doc, fields, skipId);
+        model4 = function model5(doc, fields, skipId) {
+          model5.hooks.execPreSync("createModel", doc);
+          if (!(this instanceof model5)) {
+            return new model5(doc, fields, skipId);
           }
-          const discriminatorKey = model3.schema.options.discriminatorKey;
-          if (model3.discriminators == null || doc == null || doc[discriminatorKey] == null) {
+          const discriminatorKey = model5.schema.options.discriminatorKey;
+          if (model5.discriminators == null || doc == null || doc[discriminatorKey] == null) {
             Model.call(this, doc, fields, skipId);
             return;
           }
-          const Discriminator = model3.discriminators[doc[discriminatorKey]] || getDiscriminatorByValue(model3.discriminators, doc[discriminatorKey]);
+          const Discriminator = model5.discriminators[doc[discriminatorKey]] || getDiscriminatorByValue(model5.discriminators, doc[discriminatorKey]);
           if (Discriminator != null) {
             return new Discriminator(doc, fields, skipId);
           }
           Model.call(this, doc, fields, skipId);
         };
       }
-      model2.hooks = schema.s.hooks.clone();
-      model2.base = base;
-      model2.modelName = name;
-      if (!(model2.prototype instanceof Model)) {
-        Object.setPrototypeOf(model2, Model);
-        Object.setPrototypeOf(model2.prototype, Model.prototype);
+      model4.hooks = schema.s.hooks.clone();
+      model4.base = base;
+      model4.modelName = name;
+      if (!(model4.prototype instanceof Model)) {
+        Object.setPrototypeOf(model4, Model);
+        Object.setPrototypeOf(model4.prototype, Model.prototype);
       }
-      model2.model = function model3(name2) {
+      model4.model = function model5(name2) {
         return this.db.model(name2);
       };
-      model2.db = connection;
-      model2.prototype.db = connection;
-      model2.prototype[modelDbSymbol] = connection;
-      model2.discriminators = model2.prototype.discriminators = void 0;
-      model2[modelSymbol] = true;
-      model2.events = new EventEmitter();
+      model4.db = connection;
+      model4.prototype.db = connection;
+      model4.prototype[modelDbSymbol] = connection;
+      model4.discriminators = model4.prototype.discriminators = void 0;
+      model4[modelSymbol] = true;
+      model4.events = new EventEmitter();
       schema._preCompile();
       const _userProvidedOptions = schema._userProvidedOptions || {};
       const collectionOptions = {
         schemaUserProvidedOptions: _userProvidedOptions,
         capped: schema.options.capped,
-        Promise: model2.base.Promise,
+        Promise: model4.base.Promise,
         modelName: name
       };
       if (schema.options.autoCreate !== void 0) {
@@ -78018,30 +78018,30 @@ var require_model = __commonJS({
         collectionName,
         collectionOptions
       );
-      model2.prototype.collection = collection;
-      model2.prototype.$collection = collection;
-      model2.prototype[modelCollectionSymbol] = collection;
-      model2.prototype.$__setSchema(schema);
-      applyMethods(model2, schema);
-      applyStatics(model2, schema);
-      applyHooks(model2, schema);
-      applyStaticHooks(model2, schema.s.hooks, schema.statics);
-      model2.schema = model2.prototype.$__schema;
-      model2.collection = collection;
-      model2.$__collection = collection;
-      model2.Query = function() {
+      model4.prototype.collection = collection;
+      model4.prototype.$collection = collection;
+      model4.prototype[modelCollectionSymbol] = collection;
+      model4.prototype.$__setSchema(schema);
+      applyMethods(model4, schema);
+      applyStatics(model4, schema);
+      applyHooks(model4, schema);
+      applyStaticHooks(model4, schema.s.hooks, schema.statics);
+      model4.schema = model4.prototype.$__schema;
+      model4.collection = collection;
+      model4.$__collection = collection;
+      model4.Query = function() {
         Query.apply(this, arguments);
       };
-      Object.setPrototypeOf(model2.Query.prototype, Query.prototype);
-      model2.Query.base = Query.base;
-      model2.Query.prototype.constructor = Query;
-      model2._applyQueryMiddleware();
-      applyQueryMethods(model2, schema.query);
-      return model2;
+      Object.setPrototypeOf(model4.Query.prototype, Query.prototype);
+      model4.Query.base = Query.base;
+      model4.Query.prototype.constructor = Query;
+      model4._applyQueryMiddleware();
+      applyQueryMethods(model4, schema.query);
+      return model4;
     };
-    function applyQueryMethods(model2, methods) {
+    function applyQueryMethods(model4, methods) {
       for (const i in methods) {
-        model2.Query.prototype[i] = methods[i];
+        model4.Query.prototype[i] = methods[i];
       }
     }
     Model.__subclass = function subclass(conn, schema, collection) {
@@ -78601,11 +78601,11 @@ var require_mongoose = __commonJS({
         schema = false;
       }
       if (arguments.length === 1) {
-        const model3 = _mongoose.models[name];
-        if (!model3) {
+        const model5 = _mongoose.models[name];
+        if (!model5) {
           throw new MongooseError.MissingSchemaError(name);
         }
-        return model3;
+        return model5;
       }
       if (utils.isObject(schema) && !(schema instanceof Schema2)) {
         schema = new Schema2(schema);
@@ -78627,9 +78627,9 @@ var require_mongoose = __commonJS({
           throw new _mongoose.Error.OverwriteModelError(name);
         }
         if (collection && collection !== _mongoose.models[name].collection.name) {
-          const model3 = _mongoose.models[name];
-          schema = model3.prototype.schema;
-          const sub = model3.__subclass(_mongoose.connection, schema, collection);
+          const model5 = _mongoose.models[name];
+          schema = model5.prototype.schema;
+          const sub = model5.__subclass(_mongoose.connection, schema, collection);
           return sub;
         }
         return _mongoose.models[name];
@@ -78637,18 +78637,18 @@ var require_mongoose = __commonJS({
       if (schema == null) {
         throw new _mongoose.Error.MissingSchemaError(name);
       }
-      const model2 = _mongoose._model(name, schema, collection, options);
-      _mongoose.connection.models[name] = model2;
-      _mongoose.models[name] = model2;
-      return model2;
+      const model4 = _mongoose._model(name, schema, collection, options);
+      _mongoose.connection.models[name] = model4;
+      _mongoose.models[name] = model4;
+      return model4;
     };
     Mongoose.prototype._model = function(name, schema, collection, options) {
       const _mongoose = this instanceof Mongoose ? this : mongoose;
-      let model2;
+      let model4;
       if (typeof name === "function") {
-        model2 = name;
-        name = model2.name;
-        if (!(model2.prototype instanceof Model)) {
+        model4 = name;
+        name = model4.name;
+        if (!(model4.prototype instanceof Model)) {
           throw new _mongoose.Error("The provided class " + name + " must extend Model");
         }
       }
@@ -78665,17 +78665,17 @@ var require_mongoose = __commonJS({
         collection = schema.get("collection") || utils.toCollectionName(name, _mongoose.pluralize());
       }
       const connection = options.connection || _mongoose.connection;
-      model2 = _mongoose.Model.compile(model2 || name, schema, collection, connection, _mongoose);
-      model2.init().catch(function $modelInitNoop() {
+      model4 = _mongoose.Model.compile(model4 || name, schema, collection, connection, _mongoose);
+      model4.init().catch(function $modelInitNoop() {
       });
-      connection.emit("model", model2);
+      connection.emit("model", model4);
       if (schema._applyDiscriminators != null) {
         for (const disc of schema._applyDiscriminators.keys()) {
-          model2.discriminator(disc, schema._applyDiscriminators.get(disc));
+          model4.discriminator(disc, schema._applyDiscriminators.get(disc));
         }
       }
       applyEmbeddedDiscriminators(schema);
-      return model2;
+      return model4;
     };
     Mongoose.prototype.deleteModel = function(name) {
       const _mongoose = this instanceof Mongoose ? this : mongoose;
@@ -78839,484 +78839,6 @@ var require_mongoose2 = __commonJS({
     module2.exports.trusted = mongoose.trusted;
     module2.exports.skipMiddlewareFunction = mongoose.skipMiddlewareFunction;
     module2.exports.overwriteMiddlewareResult = mongoose.overwriteMiddlewareResult;
-  }
-});
-
-// ../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/legacy.js
-var require_legacy = __commonJS({
-  "../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/legacy.js"(exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.USE_PROXY = exports.UNSUPPORTED_MEDIA_TYPE = exports.UNPROCESSABLE_ENTITY = exports.UNAUTHORIZED = exports.TOO_MANY_REQUESTS = exports.TEMPORARY_REDIRECT = exports.SWITCHING_PROTOCOLS = exports.SERVICE_UNAVAILABLE = exports.SEE_OTHER = exports.RESET_CONTENT = exports.REQUESTED_RANGE_NOT_SATISFIABLE = exports.REQUEST_URI_TOO_LONG = exports.REQUEST_TOO_LONG = exports.REQUEST_TIMEOUT = exports.REQUEST_HEADER_FIELDS_TOO_LARGE = exports.PROXY_AUTHENTICATION_REQUIRED = exports.PROCESSING = exports.PRECONDITION_REQUIRED = exports.PRECONDITION_FAILED = exports.PERMANENT_REDIRECT = exports.PAYMENT_REQUIRED = exports.PARTIAL_CONTENT = exports.OK = exports.NOT_MODIFIED = exports.NOT_IMPLEMENTED = exports.NOT_FOUND = exports.NOT_ACCEPTABLE = exports.NON_AUTHORITATIVE_INFORMATION = exports.NO_CONTENT = exports.NETWORK_AUTHENTICATION_REQUIRED = exports.MULTIPLE_CHOICES = exports.MULTI_STATUS = exports.MOVED_TEMPORARILY = exports.MOVED_PERMANENTLY = exports.METHOD_NOT_ALLOWED = exports.METHOD_FAILURE = exports.LOCKED = exports.LENGTH_REQUIRED = exports.INTERNAL_SERVER_ERROR = exports.INSUFFICIENT_STORAGE = exports.INSUFFICIENT_SPACE_ON_RESOURCE = exports.IM_A_TEAPOT = exports.HTTP_VERSION_NOT_SUPPORTED = exports.GONE = exports.GATEWAY_TIMEOUT = exports.FORBIDDEN = exports.FAILED_DEPENDENCY = exports.EXPECTATION_FAILED = exports.CREATED = exports.CONTINUE = exports.CONFLICT = exports.BAD_REQUEST = exports.BAD_GATEWAY = exports.ACCEPTED = void 0;
-    exports.ACCEPTED = 202;
-    exports.BAD_GATEWAY = 502;
-    exports.BAD_REQUEST = 400;
-    exports.CONFLICT = 409;
-    exports.CONTINUE = 100;
-    exports.CREATED = 201;
-    exports.EXPECTATION_FAILED = 417;
-    exports.FAILED_DEPENDENCY = 424;
-    exports.FORBIDDEN = 403;
-    exports.GATEWAY_TIMEOUT = 504;
-    exports.GONE = 410;
-    exports.HTTP_VERSION_NOT_SUPPORTED = 505;
-    exports.IM_A_TEAPOT = 418;
-    exports.INSUFFICIENT_SPACE_ON_RESOURCE = 419;
-    exports.INSUFFICIENT_STORAGE = 507;
-    exports.INTERNAL_SERVER_ERROR = 500;
-    exports.LENGTH_REQUIRED = 411;
-    exports.LOCKED = 423;
-    exports.METHOD_FAILURE = 420;
-    exports.METHOD_NOT_ALLOWED = 405;
-    exports.MOVED_PERMANENTLY = 301;
-    exports.MOVED_TEMPORARILY = 302;
-    exports.MULTI_STATUS = 207;
-    exports.MULTIPLE_CHOICES = 300;
-    exports.NETWORK_AUTHENTICATION_REQUIRED = 511;
-    exports.NO_CONTENT = 204;
-    exports.NON_AUTHORITATIVE_INFORMATION = 203;
-    exports.NOT_ACCEPTABLE = 406;
-    exports.NOT_FOUND = 404;
-    exports.NOT_IMPLEMENTED = 501;
-    exports.NOT_MODIFIED = 304;
-    exports.OK = 200;
-    exports.PARTIAL_CONTENT = 206;
-    exports.PAYMENT_REQUIRED = 402;
-    exports.PERMANENT_REDIRECT = 308;
-    exports.PRECONDITION_FAILED = 412;
-    exports.PRECONDITION_REQUIRED = 428;
-    exports.PROCESSING = 102;
-    exports.PROXY_AUTHENTICATION_REQUIRED = 407;
-    exports.REQUEST_HEADER_FIELDS_TOO_LARGE = 431;
-    exports.REQUEST_TIMEOUT = 408;
-    exports.REQUEST_TOO_LONG = 413;
-    exports.REQUEST_URI_TOO_LONG = 414;
-    exports.REQUESTED_RANGE_NOT_SATISFIABLE = 416;
-    exports.RESET_CONTENT = 205;
-    exports.SEE_OTHER = 303;
-    exports.SERVICE_UNAVAILABLE = 503;
-    exports.SWITCHING_PROTOCOLS = 101;
-    exports.TEMPORARY_REDIRECT = 307;
-    exports.TOO_MANY_REQUESTS = 429;
-    exports.UNAUTHORIZED = 401;
-    exports.UNPROCESSABLE_ENTITY = 422;
-    exports.UNSUPPORTED_MEDIA_TYPE = 415;
-    exports.USE_PROXY = 305;
-    exports.default = {
-      ACCEPTED: exports.ACCEPTED,
-      BAD_GATEWAY: exports.BAD_GATEWAY,
-      BAD_REQUEST: exports.BAD_REQUEST,
-      CONFLICT: exports.CONFLICT,
-      CONTINUE: exports.CONTINUE,
-      CREATED: exports.CREATED,
-      EXPECTATION_FAILED: exports.EXPECTATION_FAILED,
-      FORBIDDEN: exports.FORBIDDEN,
-      GATEWAY_TIMEOUT: exports.GATEWAY_TIMEOUT,
-      GONE: exports.GONE,
-      HTTP_VERSION_NOT_SUPPORTED: exports.HTTP_VERSION_NOT_SUPPORTED,
-      IM_A_TEAPOT: exports.IM_A_TEAPOT,
-      INSUFFICIENT_SPACE_ON_RESOURCE: exports.INSUFFICIENT_SPACE_ON_RESOURCE,
-      INSUFFICIENT_STORAGE: exports.INSUFFICIENT_STORAGE,
-      INTERNAL_SERVER_ERROR: exports.INTERNAL_SERVER_ERROR,
-      LENGTH_REQUIRED: exports.LENGTH_REQUIRED,
-      LOCKED: exports.LOCKED,
-      METHOD_FAILURE: exports.METHOD_FAILURE,
-      METHOD_NOT_ALLOWED: exports.METHOD_NOT_ALLOWED,
-      MOVED_PERMANENTLY: exports.MOVED_PERMANENTLY,
-      MOVED_TEMPORARILY: exports.MOVED_TEMPORARILY,
-      MULTI_STATUS: exports.MULTI_STATUS,
-      MULTIPLE_CHOICES: exports.MULTIPLE_CHOICES,
-      NETWORK_AUTHENTICATION_REQUIRED: exports.NETWORK_AUTHENTICATION_REQUIRED,
-      NO_CONTENT: exports.NO_CONTENT,
-      NON_AUTHORITATIVE_INFORMATION: exports.NON_AUTHORITATIVE_INFORMATION,
-      NOT_ACCEPTABLE: exports.NOT_ACCEPTABLE,
-      NOT_FOUND: exports.NOT_FOUND,
-      NOT_IMPLEMENTED: exports.NOT_IMPLEMENTED,
-      NOT_MODIFIED: exports.NOT_MODIFIED,
-      OK: exports.OK,
-      PARTIAL_CONTENT: exports.PARTIAL_CONTENT,
-      PAYMENT_REQUIRED: exports.PAYMENT_REQUIRED,
-      PERMANENT_REDIRECT: exports.PERMANENT_REDIRECT,
-      PRECONDITION_FAILED: exports.PRECONDITION_FAILED,
-      PRECONDITION_REQUIRED: exports.PRECONDITION_REQUIRED,
-      PROCESSING: exports.PROCESSING,
-      PROXY_AUTHENTICATION_REQUIRED: exports.PROXY_AUTHENTICATION_REQUIRED,
-      REQUEST_HEADER_FIELDS_TOO_LARGE: exports.REQUEST_HEADER_FIELDS_TOO_LARGE,
-      REQUEST_TIMEOUT: exports.REQUEST_TIMEOUT,
-      REQUEST_TOO_LONG: exports.REQUEST_TOO_LONG,
-      REQUEST_URI_TOO_LONG: exports.REQUEST_URI_TOO_LONG,
-      REQUESTED_RANGE_NOT_SATISFIABLE: exports.REQUESTED_RANGE_NOT_SATISFIABLE,
-      RESET_CONTENT: exports.RESET_CONTENT,
-      SEE_OTHER: exports.SEE_OTHER,
-      SERVICE_UNAVAILABLE: exports.SERVICE_UNAVAILABLE,
-      SWITCHING_PROTOCOLS: exports.SWITCHING_PROTOCOLS,
-      TEMPORARY_REDIRECT: exports.TEMPORARY_REDIRECT,
-      TOO_MANY_REQUESTS: exports.TOO_MANY_REQUESTS,
-      UNAUTHORIZED: exports.UNAUTHORIZED,
-      UNPROCESSABLE_ENTITY: exports.UNPROCESSABLE_ENTITY,
-      UNSUPPORTED_MEDIA_TYPE: exports.UNSUPPORTED_MEDIA_TYPE,
-      USE_PROXY: exports.USE_PROXY
-    };
-  }
-});
-
-// ../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/utils.js
-var require_utils8 = __commonJS({
-  "../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/utils.js"(exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.reasonPhraseToStatusCode = exports.statusCodeToReasonPhrase = void 0;
-    exports.statusCodeToReasonPhrase = {
-      "202": "Accepted",
-      "502": "Bad Gateway",
-      "400": "Bad Request",
-      "409": "Conflict",
-      "100": "Continue",
-      "201": "Created",
-      "417": "Expectation Failed",
-      "424": "Failed Dependency",
-      "403": "Forbidden",
-      "504": "Gateway Timeout",
-      "410": "Gone",
-      "505": "HTTP Version Not Supported",
-      "418": "I'm a teapot",
-      "419": "Insufficient Space on Resource",
-      "507": "Insufficient Storage",
-      "500": "Internal Server Error",
-      "411": "Length Required",
-      "423": "Locked",
-      "420": "Method Failure",
-      "405": "Method Not Allowed",
-      "301": "Moved Permanently",
-      "302": "Moved Temporarily",
-      "207": "Multi-Status",
-      "300": "Multiple Choices",
-      "511": "Network Authentication Required",
-      "204": "No Content",
-      "203": "Non Authoritative Information",
-      "406": "Not Acceptable",
-      "404": "Not Found",
-      "501": "Not Implemented",
-      "304": "Not Modified",
-      "200": "OK",
-      "206": "Partial Content",
-      "402": "Payment Required",
-      "308": "Permanent Redirect",
-      "412": "Precondition Failed",
-      "428": "Precondition Required",
-      "102": "Processing",
-      "103": "Early Hints",
-      "426": "Upgrade Required",
-      "407": "Proxy Authentication Required",
-      "431": "Request Header Fields Too Large",
-      "408": "Request Timeout",
-      "413": "Request Entity Too Large",
-      "414": "Request-URI Too Long",
-      "416": "Requested Range Not Satisfiable",
-      "205": "Reset Content",
-      "303": "See Other",
-      "503": "Service Unavailable",
-      "101": "Switching Protocols",
-      "307": "Temporary Redirect",
-      "429": "Too Many Requests",
-      "401": "Unauthorized",
-      "451": "Unavailable For Legal Reasons",
-      "422": "Unprocessable Entity",
-      "415": "Unsupported Media Type",
-      "305": "Use Proxy",
-      "421": "Misdirected Request"
-    };
-    exports.reasonPhraseToStatusCode = {
-      "Accepted": 202,
-      "Bad Gateway": 502,
-      "Bad Request": 400,
-      "Conflict": 409,
-      "Continue": 100,
-      "Created": 201,
-      "Expectation Failed": 417,
-      "Failed Dependency": 424,
-      "Forbidden": 403,
-      "Gateway Timeout": 504,
-      "Gone": 410,
-      "HTTP Version Not Supported": 505,
-      "I'm a teapot": 418,
-      "Insufficient Space on Resource": 419,
-      "Insufficient Storage": 507,
-      "Internal Server Error": 500,
-      "Length Required": 411,
-      "Locked": 423,
-      "Method Failure": 420,
-      "Method Not Allowed": 405,
-      "Moved Permanently": 301,
-      "Moved Temporarily": 302,
-      "Multi-Status": 207,
-      "Multiple Choices": 300,
-      "Network Authentication Required": 511,
-      "No Content": 204,
-      "Non Authoritative Information": 203,
-      "Not Acceptable": 406,
-      "Not Found": 404,
-      "Not Implemented": 501,
-      "Not Modified": 304,
-      "OK": 200,
-      "Partial Content": 206,
-      "Payment Required": 402,
-      "Permanent Redirect": 308,
-      "Precondition Failed": 412,
-      "Precondition Required": 428,
-      "Processing": 102,
-      "Early Hints": 103,
-      "Upgrade Required": 426,
-      "Proxy Authentication Required": 407,
-      "Request Header Fields Too Large": 431,
-      "Request Timeout": 408,
-      "Request Entity Too Large": 413,
-      "Request-URI Too Long": 414,
-      "Requested Range Not Satisfiable": 416,
-      "Reset Content": 205,
-      "See Other": 303,
-      "Service Unavailable": 503,
-      "Switching Protocols": 101,
-      "Temporary Redirect": 307,
-      "Too Many Requests": 429,
-      "Unauthorized": 401,
-      "Unavailable For Legal Reasons": 451,
-      "Unprocessable Entity": 422,
-      "Unsupported Media Type": 415,
-      "Use Proxy": 305,
-      "Misdirected Request": 421
-    };
-  }
-});
-
-// ../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/utils-functions.js
-var require_utils_functions = __commonJS({
-  "../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/utils-functions.js"(exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.getStatusText = exports.getStatusCode = exports.getReasonPhrase = void 0;
-    var utils_1 = require_utils8();
-    function getReasonPhrase(statusCode) {
-      var result = utils_1.statusCodeToReasonPhrase[statusCode.toString()];
-      if (!result) {
-        throw new Error("Status code does not exist: " + statusCode);
-      }
-      return result;
-    }
-    exports.getReasonPhrase = getReasonPhrase;
-    function getStatusCode(reasonPhrase) {
-      var result = utils_1.reasonPhraseToStatusCode[reasonPhrase];
-      if (!result) {
-        throw new Error("Reason phrase does not exist: " + reasonPhrase);
-      }
-      return result;
-    }
-    exports.getStatusCode = getStatusCode;
-    exports.getStatusText = getReasonPhrase;
-  }
-});
-
-// ../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/status-codes.js
-var require_status_codes = __commonJS({
-  "../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/status-codes.js"(exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.StatusCodes = void 0;
-    var StatusCodes3;
-    (function(StatusCodes4) {
-      StatusCodes4[StatusCodes4["CONTINUE"] = 100] = "CONTINUE";
-      StatusCodes4[StatusCodes4["SWITCHING_PROTOCOLS"] = 101] = "SWITCHING_PROTOCOLS";
-      StatusCodes4[StatusCodes4["PROCESSING"] = 102] = "PROCESSING";
-      StatusCodes4[StatusCodes4["EARLY_HINTS"] = 103] = "EARLY_HINTS";
-      StatusCodes4[StatusCodes4["OK"] = 200] = "OK";
-      StatusCodes4[StatusCodes4["CREATED"] = 201] = "CREATED";
-      StatusCodes4[StatusCodes4["ACCEPTED"] = 202] = "ACCEPTED";
-      StatusCodes4[StatusCodes4["NON_AUTHORITATIVE_INFORMATION"] = 203] = "NON_AUTHORITATIVE_INFORMATION";
-      StatusCodes4[StatusCodes4["NO_CONTENT"] = 204] = "NO_CONTENT";
-      StatusCodes4[StatusCodes4["RESET_CONTENT"] = 205] = "RESET_CONTENT";
-      StatusCodes4[StatusCodes4["PARTIAL_CONTENT"] = 206] = "PARTIAL_CONTENT";
-      StatusCodes4[StatusCodes4["MULTI_STATUS"] = 207] = "MULTI_STATUS";
-      StatusCodes4[StatusCodes4["MULTIPLE_CHOICES"] = 300] = "MULTIPLE_CHOICES";
-      StatusCodes4[StatusCodes4["MOVED_PERMANENTLY"] = 301] = "MOVED_PERMANENTLY";
-      StatusCodes4[StatusCodes4["MOVED_TEMPORARILY"] = 302] = "MOVED_TEMPORARILY";
-      StatusCodes4[StatusCodes4["SEE_OTHER"] = 303] = "SEE_OTHER";
-      StatusCodes4[StatusCodes4["NOT_MODIFIED"] = 304] = "NOT_MODIFIED";
-      StatusCodes4[StatusCodes4["USE_PROXY"] = 305] = "USE_PROXY";
-      StatusCodes4[StatusCodes4["TEMPORARY_REDIRECT"] = 307] = "TEMPORARY_REDIRECT";
-      StatusCodes4[StatusCodes4["PERMANENT_REDIRECT"] = 308] = "PERMANENT_REDIRECT";
-      StatusCodes4[StatusCodes4["BAD_REQUEST"] = 400] = "BAD_REQUEST";
-      StatusCodes4[StatusCodes4["UNAUTHORIZED"] = 401] = "UNAUTHORIZED";
-      StatusCodes4[StatusCodes4["PAYMENT_REQUIRED"] = 402] = "PAYMENT_REQUIRED";
-      StatusCodes4[StatusCodes4["FORBIDDEN"] = 403] = "FORBIDDEN";
-      StatusCodes4[StatusCodes4["NOT_FOUND"] = 404] = "NOT_FOUND";
-      StatusCodes4[StatusCodes4["METHOD_NOT_ALLOWED"] = 405] = "METHOD_NOT_ALLOWED";
-      StatusCodes4[StatusCodes4["NOT_ACCEPTABLE"] = 406] = "NOT_ACCEPTABLE";
-      StatusCodes4[StatusCodes4["PROXY_AUTHENTICATION_REQUIRED"] = 407] = "PROXY_AUTHENTICATION_REQUIRED";
-      StatusCodes4[StatusCodes4["REQUEST_TIMEOUT"] = 408] = "REQUEST_TIMEOUT";
-      StatusCodes4[StatusCodes4["CONFLICT"] = 409] = "CONFLICT";
-      StatusCodes4[StatusCodes4["GONE"] = 410] = "GONE";
-      StatusCodes4[StatusCodes4["LENGTH_REQUIRED"] = 411] = "LENGTH_REQUIRED";
-      StatusCodes4[StatusCodes4["PRECONDITION_FAILED"] = 412] = "PRECONDITION_FAILED";
-      StatusCodes4[StatusCodes4["REQUEST_TOO_LONG"] = 413] = "REQUEST_TOO_LONG";
-      StatusCodes4[StatusCodes4["REQUEST_URI_TOO_LONG"] = 414] = "REQUEST_URI_TOO_LONG";
-      StatusCodes4[StatusCodes4["UNSUPPORTED_MEDIA_TYPE"] = 415] = "UNSUPPORTED_MEDIA_TYPE";
-      StatusCodes4[StatusCodes4["REQUESTED_RANGE_NOT_SATISFIABLE"] = 416] = "REQUESTED_RANGE_NOT_SATISFIABLE";
-      StatusCodes4[StatusCodes4["EXPECTATION_FAILED"] = 417] = "EXPECTATION_FAILED";
-      StatusCodes4[StatusCodes4["IM_A_TEAPOT"] = 418] = "IM_A_TEAPOT";
-      StatusCodes4[StatusCodes4["INSUFFICIENT_SPACE_ON_RESOURCE"] = 419] = "INSUFFICIENT_SPACE_ON_RESOURCE";
-      StatusCodes4[StatusCodes4["METHOD_FAILURE"] = 420] = "METHOD_FAILURE";
-      StatusCodes4[StatusCodes4["MISDIRECTED_REQUEST"] = 421] = "MISDIRECTED_REQUEST";
-      StatusCodes4[StatusCodes4["UNPROCESSABLE_ENTITY"] = 422] = "UNPROCESSABLE_ENTITY";
-      StatusCodes4[StatusCodes4["LOCKED"] = 423] = "LOCKED";
-      StatusCodes4[StatusCodes4["FAILED_DEPENDENCY"] = 424] = "FAILED_DEPENDENCY";
-      StatusCodes4[StatusCodes4["UPGRADE_REQUIRED"] = 426] = "UPGRADE_REQUIRED";
-      StatusCodes4[StatusCodes4["PRECONDITION_REQUIRED"] = 428] = "PRECONDITION_REQUIRED";
-      StatusCodes4[StatusCodes4["TOO_MANY_REQUESTS"] = 429] = "TOO_MANY_REQUESTS";
-      StatusCodes4[StatusCodes4["REQUEST_HEADER_FIELDS_TOO_LARGE"] = 431] = "REQUEST_HEADER_FIELDS_TOO_LARGE";
-      StatusCodes4[StatusCodes4["UNAVAILABLE_FOR_LEGAL_REASONS"] = 451] = "UNAVAILABLE_FOR_LEGAL_REASONS";
-      StatusCodes4[StatusCodes4["INTERNAL_SERVER_ERROR"] = 500] = "INTERNAL_SERVER_ERROR";
-      StatusCodes4[StatusCodes4["NOT_IMPLEMENTED"] = 501] = "NOT_IMPLEMENTED";
-      StatusCodes4[StatusCodes4["BAD_GATEWAY"] = 502] = "BAD_GATEWAY";
-      StatusCodes4[StatusCodes4["SERVICE_UNAVAILABLE"] = 503] = "SERVICE_UNAVAILABLE";
-      StatusCodes4[StatusCodes4["GATEWAY_TIMEOUT"] = 504] = "GATEWAY_TIMEOUT";
-      StatusCodes4[StatusCodes4["HTTP_VERSION_NOT_SUPPORTED"] = 505] = "HTTP_VERSION_NOT_SUPPORTED";
-      StatusCodes4[StatusCodes4["INSUFFICIENT_STORAGE"] = 507] = "INSUFFICIENT_STORAGE";
-      StatusCodes4[StatusCodes4["NETWORK_AUTHENTICATION_REQUIRED"] = 511] = "NETWORK_AUTHENTICATION_REQUIRED";
-    })(StatusCodes3 = exports.StatusCodes || (exports.StatusCodes = {}));
-  }
-});
-
-// ../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/reason-phrases.js
-var require_reason_phrases = __commonJS({
-  "../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/reason-phrases.js"(exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ReasonPhrases = void 0;
-    var ReasonPhrases;
-    (function(ReasonPhrases2) {
-      ReasonPhrases2["ACCEPTED"] = "Accepted";
-      ReasonPhrases2["BAD_GATEWAY"] = "Bad Gateway";
-      ReasonPhrases2["BAD_REQUEST"] = "Bad Request";
-      ReasonPhrases2["CONFLICT"] = "Conflict";
-      ReasonPhrases2["CONTINUE"] = "Continue";
-      ReasonPhrases2["CREATED"] = "Created";
-      ReasonPhrases2["EXPECTATION_FAILED"] = "Expectation Failed";
-      ReasonPhrases2["FAILED_DEPENDENCY"] = "Failed Dependency";
-      ReasonPhrases2["FORBIDDEN"] = "Forbidden";
-      ReasonPhrases2["GATEWAY_TIMEOUT"] = "Gateway Timeout";
-      ReasonPhrases2["GONE"] = "Gone";
-      ReasonPhrases2["HTTP_VERSION_NOT_SUPPORTED"] = "HTTP Version Not Supported";
-      ReasonPhrases2["IM_A_TEAPOT"] = "I'm a teapot";
-      ReasonPhrases2["INSUFFICIENT_SPACE_ON_RESOURCE"] = "Insufficient Space on Resource";
-      ReasonPhrases2["INSUFFICIENT_STORAGE"] = "Insufficient Storage";
-      ReasonPhrases2["INTERNAL_SERVER_ERROR"] = "Internal Server Error";
-      ReasonPhrases2["LENGTH_REQUIRED"] = "Length Required";
-      ReasonPhrases2["LOCKED"] = "Locked";
-      ReasonPhrases2["METHOD_FAILURE"] = "Method Failure";
-      ReasonPhrases2["METHOD_NOT_ALLOWED"] = "Method Not Allowed";
-      ReasonPhrases2["MOVED_PERMANENTLY"] = "Moved Permanently";
-      ReasonPhrases2["MOVED_TEMPORARILY"] = "Moved Temporarily";
-      ReasonPhrases2["MULTI_STATUS"] = "Multi-Status";
-      ReasonPhrases2["MULTIPLE_CHOICES"] = "Multiple Choices";
-      ReasonPhrases2["NETWORK_AUTHENTICATION_REQUIRED"] = "Network Authentication Required";
-      ReasonPhrases2["NO_CONTENT"] = "No Content";
-      ReasonPhrases2["NON_AUTHORITATIVE_INFORMATION"] = "Non Authoritative Information";
-      ReasonPhrases2["NOT_ACCEPTABLE"] = "Not Acceptable";
-      ReasonPhrases2["NOT_FOUND"] = "Not Found";
-      ReasonPhrases2["NOT_IMPLEMENTED"] = "Not Implemented";
-      ReasonPhrases2["NOT_MODIFIED"] = "Not Modified";
-      ReasonPhrases2["OK"] = "OK";
-      ReasonPhrases2["PARTIAL_CONTENT"] = "Partial Content";
-      ReasonPhrases2["PAYMENT_REQUIRED"] = "Payment Required";
-      ReasonPhrases2["PERMANENT_REDIRECT"] = "Permanent Redirect";
-      ReasonPhrases2["PRECONDITION_FAILED"] = "Precondition Failed";
-      ReasonPhrases2["PRECONDITION_REQUIRED"] = "Precondition Required";
-      ReasonPhrases2["PROCESSING"] = "Processing";
-      ReasonPhrases2["EARLY_HINTS"] = "Early Hints";
-      ReasonPhrases2["UPGRADE_REQUIRED"] = "Upgrade Required";
-      ReasonPhrases2["PROXY_AUTHENTICATION_REQUIRED"] = "Proxy Authentication Required";
-      ReasonPhrases2["REQUEST_HEADER_FIELDS_TOO_LARGE"] = "Request Header Fields Too Large";
-      ReasonPhrases2["REQUEST_TIMEOUT"] = "Request Timeout";
-      ReasonPhrases2["REQUEST_TOO_LONG"] = "Request Entity Too Large";
-      ReasonPhrases2["REQUEST_URI_TOO_LONG"] = "Request-URI Too Long";
-      ReasonPhrases2["REQUESTED_RANGE_NOT_SATISFIABLE"] = "Requested Range Not Satisfiable";
-      ReasonPhrases2["RESET_CONTENT"] = "Reset Content";
-      ReasonPhrases2["SEE_OTHER"] = "See Other";
-      ReasonPhrases2["SERVICE_UNAVAILABLE"] = "Service Unavailable";
-      ReasonPhrases2["SWITCHING_PROTOCOLS"] = "Switching Protocols";
-      ReasonPhrases2["TEMPORARY_REDIRECT"] = "Temporary Redirect";
-      ReasonPhrases2["TOO_MANY_REQUESTS"] = "Too Many Requests";
-      ReasonPhrases2["UNAUTHORIZED"] = "Unauthorized";
-      ReasonPhrases2["UNAVAILABLE_FOR_LEGAL_REASONS"] = "Unavailable For Legal Reasons";
-      ReasonPhrases2["UNPROCESSABLE_ENTITY"] = "Unprocessable Entity";
-      ReasonPhrases2["UNSUPPORTED_MEDIA_TYPE"] = "Unsupported Media Type";
-      ReasonPhrases2["USE_PROXY"] = "Use Proxy";
-      ReasonPhrases2["MISDIRECTED_REQUEST"] = "Misdirected Request";
-    })(ReasonPhrases = exports.ReasonPhrases || (exports.ReasonPhrases = {}));
-  }
-});
-
-// ../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/index.js
-var require_cjs = __commonJS({
-  "../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/index.js"(exports) {
-    "use strict";
-    var __assign = exports && exports.__assign || function() {
-      __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-          s = arguments[i];
-          for (var p in s)
-            if (Object.prototype.hasOwnProperty.call(s, p))
-              t[p] = s[p];
-        }
-        return t;
-      };
-      return __assign.apply(this, arguments);
-    };
-    var __createBinding = exports && exports.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: function() {
-        return m[k];
-      } });
-    } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      o[k2] = m[k];
-    });
-    var __exportStar = exports && exports.__exportStar || function(m, exports2) {
-      for (var p in m)
-        if (p !== "default" && !exports2.hasOwnProperty(p))
-          __createBinding(exports2, m, p);
-    };
-    var __importDefault = exports && exports.__importDefault || function(mod) {
-      return mod && mod.__esModule ? mod : { "default": mod };
-    };
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var legacy_1 = __importDefault(require_legacy());
-    var utils_functions_1 = require_utils_functions();
-    var utils_functions_2 = require_utils_functions();
-    Object.defineProperty(exports, "getStatusCode", { enumerable: true, get: function() {
-      return utils_functions_2.getStatusCode;
-    } });
-    Object.defineProperty(exports, "getReasonPhrase", { enumerable: true, get: function() {
-      return utils_functions_2.getReasonPhrase;
-    } });
-    Object.defineProperty(exports, "getStatusText", { enumerable: true, get: function() {
-      return utils_functions_2.getStatusText;
-    } });
-    var status_codes_1 = require_status_codes();
-    Object.defineProperty(exports, "StatusCodes", { enumerable: true, get: function() {
-      return status_codes_1.StatusCodes;
-    } });
-    var reason_phrases_1 = require_reason_phrases();
-    Object.defineProperty(exports, "ReasonPhrases", { enumerable: true, get: function() {
-      return reason_phrases_1.ReasonPhrases;
-    } });
-    __exportStar(require_legacy(), exports);
-    exports.default = __assign(__assign({}, legacy_1.default), {
-      getStatusCode: utils_functions_1.getStatusCode,
-      getStatusText: utils_functions_1.getStatusText
-    });
   }
 });
 
@@ -80522,10 +80044,488 @@ var require_dist2 = __commonJS({
   }
 });
 
+// ../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/legacy.js
+var require_legacy = __commonJS({
+  "../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/legacy.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.USE_PROXY = exports.UNSUPPORTED_MEDIA_TYPE = exports.UNPROCESSABLE_ENTITY = exports.UNAUTHORIZED = exports.TOO_MANY_REQUESTS = exports.TEMPORARY_REDIRECT = exports.SWITCHING_PROTOCOLS = exports.SERVICE_UNAVAILABLE = exports.SEE_OTHER = exports.RESET_CONTENT = exports.REQUESTED_RANGE_NOT_SATISFIABLE = exports.REQUEST_URI_TOO_LONG = exports.REQUEST_TOO_LONG = exports.REQUEST_TIMEOUT = exports.REQUEST_HEADER_FIELDS_TOO_LARGE = exports.PROXY_AUTHENTICATION_REQUIRED = exports.PROCESSING = exports.PRECONDITION_REQUIRED = exports.PRECONDITION_FAILED = exports.PERMANENT_REDIRECT = exports.PAYMENT_REQUIRED = exports.PARTIAL_CONTENT = exports.OK = exports.NOT_MODIFIED = exports.NOT_IMPLEMENTED = exports.NOT_FOUND = exports.NOT_ACCEPTABLE = exports.NON_AUTHORITATIVE_INFORMATION = exports.NO_CONTENT = exports.NETWORK_AUTHENTICATION_REQUIRED = exports.MULTIPLE_CHOICES = exports.MULTI_STATUS = exports.MOVED_TEMPORARILY = exports.MOVED_PERMANENTLY = exports.METHOD_NOT_ALLOWED = exports.METHOD_FAILURE = exports.LOCKED = exports.LENGTH_REQUIRED = exports.INTERNAL_SERVER_ERROR = exports.INSUFFICIENT_STORAGE = exports.INSUFFICIENT_SPACE_ON_RESOURCE = exports.IM_A_TEAPOT = exports.HTTP_VERSION_NOT_SUPPORTED = exports.GONE = exports.GATEWAY_TIMEOUT = exports.FORBIDDEN = exports.FAILED_DEPENDENCY = exports.EXPECTATION_FAILED = exports.CREATED = exports.CONTINUE = exports.CONFLICT = exports.BAD_REQUEST = exports.BAD_GATEWAY = exports.ACCEPTED = void 0;
+    exports.ACCEPTED = 202;
+    exports.BAD_GATEWAY = 502;
+    exports.BAD_REQUEST = 400;
+    exports.CONFLICT = 409;
+    exports.CONTINUE = 100;
+    exports.CREATED = 201;
+    exports.EXPECTATION_FAILED = 417;
+    exports.FAILED_DEPENDENCY = 424;
+    exports.FORBIDDEN = 403;
+    exports.GATEWAY_TIMEOUT = 504;
+    exports.GONE = 410;
+    exports.HTTP_VERSION_NOT_SUPPORTED = 505;
+    exports.IM_A_TEAPOT = 418;
+    exports.INSUFFICIENT_SPACE_ON_RESOURCE = 419;
+    exports.INSUFFICIENT_STORAGE = 507;
+    exports.INTERNAL_SERVER_ERROR = 500;
+    exports.LENGTH_REQUIRED = 411;
+    exports.LOCKED = 423;
+    exports.METHOD_FAILURE = 420;
+    exports.METHOD_NOT_ALLOWED = 405;
+    exports.MOVED_PERMANENTLY = 301;
+    exports.MOVED_TEMPORARILY = 302;
+    exports.MULTI_STATUS = 207;
+    exports.MULTIPLE_CHOICES = 300;
+    exports.NETWORK_AUTHENTICATION_REQUIRED = 511;
+    exports.NO_CONTENT = 204;
+    exports.NON_AUTHORITATIVE_INFORMATION = 203;
+    exports.NOT_ACCEPTABLE = 406;
+    exports.NOT_FOUND = 404;
+    exports.NOT_IMPLEMENTED = 501;
+    exports.NOT_MODIFIED = 304;
+    exports.OK = 200;
+    exports.PARTIAL_CONTENT = 206;
+    exports.PAYMENT_REQUIRED = 402;
+    exports.PERMANENT_REDIRECT = 308;
+    exports.PRECONDITION_FAILED = 412;
+    exports.PRECONDITION_REQUIRED = 428;
+    exports.PROCESSING = 102;
+    exports.PROXY_AUTHENTICATION_REQUIRED = 407;
+    exports.REQUEST_HEADER_FIELDS_TOO_LARGE = 431;
+    exports.REQUEST_TIMEOUT = 408;
+    exports.REQUEST_TOO_LONG = 413;
+    exports.REQUEST_URI_TOO_LONG = 414;
+    exports.REQUESTED_RANGE_NOT_SATISFIABLE = 416;
+    exports.RESET_CONTENT = 205;
+    exports.SEE_OTHER = 303;
+    exports.SERVICE_UNAVAILABLE = 503;
+    exports.SWITCHING_PROTOCOLS = 101;
+    exports.TEMPORARY_REDIRECT = 307;
+    exports.TOO_MANY_REQUESTS = 429;
+    exports.UNAUTHORIZED = 401;
+    exports.UNPROCESSABLE_ENTITY = 422;
+    exports.UNSUPPORTED_MEDIA_TYPE = 415;
+    exports.USE_PROXY = 305;
+    exports.default = {
+      ACCEPTED: exports.ACCEPTED,
+      BAD_GATEWAY: exports.BAD_GATEWAY,
+      BAD_REQUEST: exports.BAD_REQUEST,
+      CONFLICT: exports.CONFLICT,
+      CONTINUE: exports.CONTINUE,
+      CREATED: exports.CREATED,
+      EXPECTATION_FAILED: exports.EXPECTATION_FAILED,
+      FORBIDDEN: exports.FORBIDDEN,
+      GATEWAY_TIMEOUT: exports.GATEWAY_TIMEOUT,
+      GONE: exports.GONE,
+      HTTP_VERSION_NOT_SUPPORTED: exports.HTTP_VERSION_NOT_SUPPORTED,
+      IM_A_TEAPOT: exports.IM_A_TEAPOT,
+      INSUFFICIENT_SPACE_ON_RESOURCE: exports.INSUFFICIENT_SPACE_ON_RESOURCE,
+      INSUFFICIENT_STORAGE: exports.INSUFFICIENT_STORAGE,
+      INTERNAL_SERVER_ERROR: exports.INTERNAL_SERVER_ERROR,
+      LENGTH_REQUIRED: exports.LENGTH_REQUIRED,
+      LOCKED: exports.LOCKED,
+      METHOD_FAILURE: exports.METHOD_FAILURE,
+      METHOD_NOT_ALLOWED: exports.METHOD_NOT_ALLOWED,
+      MOVED_PERMANENTLY: exports.MOVED_PERMANENTLY,
+      MOVED_TEMPORARILY: exports.MOVED_TEMPORARILY,
+      MULTI_STATUS: exports.MULTI_STATUS,
+      MULTIPLE_CHOICES: exports.MULTIPLE_CHOICES,
+      NETWORK_AUTHENTICATION_REQUIRED: exports.NETWORK_AUTHENTICATION_REQUIRED,
+      NO_CONTENT: exports.NO_CONTENT,
+      NON_AUTHORITATIVE_INFORMATION: exports.NON_AUTHORITATIVE_INFORMATION,
+      NOT_ACCEPTABLE: exports.NOT_ACCEPTABLE,
+      NOT_FOUND: exports.NOT_FOUND,
+      NOT_IMPLEMENTED: exports.NOT_IMPLEMENTED,
+      NOT_MODIFIED: exports.NOT_MODIFIED,
+      OK: exports.OK,
+      PARTIAL_CONTENT: exports.PARTIAL_CONTENT,
+      PAYMENT_REQUIRED: exports.PAYMENT_REQUIRED,
+      PERMANENT_REDIRECT: exports.PERMANENT_REDIRECT,
+      PRECONDITION_FAILED: exports.PRECONDITION_FAILED,
+      PRECONDITION_REQUIRED: exports.PRECONDITION_REQUIRED,
+      PROCESSING: exports.PROCESSING,
+      PROXY_AUTHENTICATION_REQUIRED: exports.PROXY_AUTHENTICATION_REQUIRED,
+      REQUEST_HEADER_FIELDS_TOO_LARGE: exports.REQUEST_HEADER_FIELDS_TOO_LARGE,
+      REQUEST_TIMEOUT: exports.REQUEST_TIMEOUT,
+      REQUEST_TOO_LONG: exports.REQUEST_TOO_LONG,
+      REQUEST_URI_TOO_LONG: exports.REQUEST_URI_TOO_LONG,
+      REQUESTED_RANGE_NOT_SATISFIABLE: exports.REQUESTED_RANGE_NOT_SATISFIABLE,
+      RESET_CONTENT: exports.RESET_CONTENT,
+      SEE_OTHER: exports.SEE_OTHER,
+      SERVICE_UNAVAILABLE: exports.SERVICE_UNAVAILABLE,
+      SWITCHING_PROTOCOLS: exports.SWITCHING_PROTOCOLS,
+      TEMPORARY_REDIRECT: exports.TEMPORARY_REDIRECT,
+      TOO_MANY_REQUESTS: exports.TOO_MANY_REQUESTS,
+      UNAUTHORIZED: exports.UNAUTHORIZED,
+      UNPROCESSABLE_ENTITY: exports.UNPROCESSABLE_ENTITY,
+      UNSUPPORTED_MEDIA_TYPE: exports.UNSUPPORTED_MEDIA_TYPE,
+      USE_PROXY: exports.USE_PROXY
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/utils.js
+var require_utils8 = __commonJS({
+  "../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/utils.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.reasonPhraseToStatusCode = exports.statusCodeToReasonPhrase = void 0;
+    exports.statusCodeToReasonPhrase = {
+      "202": "Accepted",
+      "502": "Bad Gateway",
+      "400": "Bad Request",
+      "409": "Conflict",
+      "100": "Continue",
+      "201": "Created",
+      "417": "Expectation Failed",
+      "424": "Failed Dependency",
+      "403": "Forbidden",
+      "504": "Gateway Timeout",
+      "410": "Gone",
+      "505": "HTTP Version Not Supported",
+      "418": "I'm a teapot",
+      "419": "Insufficient Space on Resource",
+      "507": "Insufficient Storage",
+      "500": "Internal Server Error",
+      "411": "Length Required",
+      "423": "Locked",
+      "420": "Method Failure",
+      "405": "Method Not Allowed",
+      "301": "Moved Permanently",
+      "302": "Moved Temporarily",
+      "207": "Multi-Status",
+      "300": "Multiple Choices",
+      "511": "Network Authentication Required",
+      "204": "No Content",
+      "203": "Non Authoritative Information",
+      "406": "Not Acceptable",
+      "404": "Not Found",
+      "501": "Not Implemented",
+      "304": "Not Modified",
+      "200": "OK",
+      "206": "Partial Content",
+      "402": "Payment Required",
+      "308": "Permanent Redirect",
+      "412": "Precondition Failed",
+      "428": "Precondition Required",
+      "102": "Processing",
+      "103": "Early Hints",
+      "426": "Upgrade Required",
+      "407": "Proxy Authentication Required",
+      "431": "Request Header Fields Too Large",
+      "408": "Request Timeout",
+      "413": "Request Entity Too Large",
+      "414": "Request-URI Too Long",
+      "416": "Requested Range Not Satisfiable",
+      "205": "Reset Content",
+      "303": "See Other",
+      "503": "Service Unavailable",
+      "101": "Switching Protocols",
+      "307": "Temporary Redirect",
+      "429": "Too Many Requests",
+      "401": "Unauthorized",
+      "451": "Unavailable For Legal Reasons",
+      "422": "Unprocessable Entity",
+      "415": "Unsupported Media Type",
+      "305": "Use Proxy",
+      "421": "Misdirected Request"
+    };
+    exports.reasonPhraseToStatusCode = {
+      "Accepted": 202,
+      "Bad Gateway": 502,
+      "Bad Request": 400,
+      "Conflict": 409,
+      "Continue": 100,
+      "Created": 201,
+      "Expectation Failed": 417,
+      "Failed Dependency": 424,
+      "Forbidden": 403,
+      "Gateway Timeout": 504,
+      "Gone": 410,
+      "HTTP Version Not Supported": 505,
+      "I'm a teapot": 418,
+      "Insufficient Space on Resource": 419,
+      "Insufficient Storage": 507,
+      "Internal Server Error": 500,
+      "Length Required": 411,
+      "Locked": 423,
+      "Method Failure": 420,
+      "Method Not Allowed": 405,
+      "Moved Permanently": 301,
+      "Moved Temporarily": 302,
+      "Multi-Status": 207,
+      "Multiple Choices": 300,
+      "Network Authentication Required": 511,
+      "No Content": 204,
+      "Non Authoritative Information": 203,
+      "Not Acceptable": 406,
+      "Not Found": 404,
+      "Not Implemented": 501,
+      "Not Modified": 304,
+      "OK": 200,
+      "Partial Content": 206,
+      "Payment Required": 402,
+      "Permanent Redirect": 308,
+      "Precondition Failed": 412,
+      "Precondition Required": 428,
+      "Processing": 102,
+      "Early Hints": 103,
+      "Upgrade Required": 426,
+      "Proxy Authentication Required": 407,
+      "Request Header Fields Too Large": 431,
+      "Request Timeout": 408,
+      "Request Entity Too Large": 413,
+      "Request-URI Too Long": 414,
+      "Requested Range Not Satisfiable": 416,
+      "Reset Content": 205,
+      "See Other": 303,
+      "Service Unavailable": 503,
+      "Switching Protocols": 101,
+      "Temporary Redirect": 307,
+      "Too Many Requests": 429,
+      "Unauthorized": 401,
+      "Unavailable For Legal Reasons": 451,
+      "Unprocessable Entity": 422,
+      "Unsupported Media Type": 415,
+      "Use Proxy": 305,
+      "Misdirected Request": 421
+    };
+  }
+});
+
+// ../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/utils-functions.js
+var require_utils_functions = __commonJS({
+  "../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/utils-functions.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.getStatusText = exports.getStatusCode = exports.getReasonPhrase = void 0;
+    var utils_1 = require_utils8();
+    function getReasonPhrase(statusCode) {
+      var result = utils_1.statusCodeToReasonPhrase[statusCode.toString()];
+      if (!result) {
+        throw new Error("Status code does not exist: " + statusCode);
+      }
+      return result;
+    }
+    exports.getReasonPhrase = getReasonPhrase;
+    function getStatusCode(reasonPhrase) {
+      var result = utils_1.reasonPhraseToStatusCode[reasonPhrase];
+      if (!result) {
+        throw new Error("Reason phrase does not exist: " + reasonPhrase);
+      }
+      return result;
+    }
+    exports.getStatusCode = getStatusCode;
+    exports.getStatusText = getReasonPhrase;
+  }
+});
+
+// ../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/status-codes.js
+var require_status_codes = __commonJS({
+  "../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/status-codes.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.StatusCodes = void 0;
+    var StatusCodes4;
+    (function(StatusCodes5) {
+      StatusCodes5[StatusCodes5["CONTINUE"] = 100] = "CONTINUE";
+      StatusCodes5[StatusCodes5["SWITCHING_PROTOCOLS"] = 101] = "SWITCHING_PROTOCOLS";
+      StatusCodes5[StatusCodes5["PROCESSING"] = 102] = "PROCESSING";
+      StatusCodes5[StatusCodes5["EARLY_HINTS"] = 103] = "EARLY_HINTS";
+      StatusCodes5[StatusCodes5["OK"] = 200] = "OK";
+      StatusCodes5[StatusCodes5["CREATED"] = 201] = "CREATED";
+      StatusCodes5[StatusCodes5["ACCEPTED"] = 202] = "ACCEPTED";
+      StatusCodes5[StatusCodes5["NON_AUTHORITATIVE_INFORMATION"] = 203] = "NON_AUTHORITATIVE_INFORMATION";
+      StatusCodes5[StatusCodes5["NO_CONTENT"] = 204] = "NO_CONTENT";
+      StatusCodes5[StatusCodes5["RESET_CONTENT"] = 205] = "RESET_CONTENT";
+      StatusCodes5[StatusCodes5["PARTIAL_CONTENT"] = 206] = "PARTIAL_CONTENT";
+      StatusCodes5[StatusCodes5["MULTI_STATUS"] = 207] = "MULTI_STATUS";
+      StatusCodes5[StatusCodes5["MULTIPLE_CHOICES"] = 300] = "MULTIPLE_CHOICES";
+      StatusCodes5[StatusCodes5["MOVED_PERMANENTLY"] = 301] = "MOVED_PERMANENTLY";
+      StatusCodes5[StatusCodes5["MOVED_TEMPORARILY"] = 302] = "MOVED_TEMPORARILY";
+      StatusCodes5[StatusCodes5["SEE_OTHER"] = 303] = "SEE_OTHER";
+      StatusCodes5[StatusCodes5["NOT_MODIFIED"] = 304] = "NOT_MODIFIED";
+      StatusCodes5[StatusCodes5["USE_PROXY"] = 305] = "USE_PROXY";
+      StatusCodes5[StatusCodes5["TEMPORARY_REDIRECT"] = 307] = "TEMPORARY_REDIRECT";
+      StatusCodes5[StatusCodes5["PERMANENT_REDIRECT"] = 308] = "PERMANENT_REDIRECT";
+      StatusCodes5[StatusCodes5["BAD_REQUEST"] = 400] = "BAD_REQUEST";
+      StatusCodes5[StatusCodes5["UNAUTHORIZED"] = 401] = "UNAUTHORIZED";
+      StatusCodes5[StatusCodes5["PAYMENT_REQUIRED"] = 402] = "PAYMENT_REQUIRED";
+      StatusCodes5[StatusCodes5["FORBIDDEN"] = 403] = "FORBIDDEN";
+      StatusCodes5[StatusCodes5["NOT_FOUND"] = 404] = "NOT_FOUND";
+      StatusCodes5[StatusCodes5["METHOD_NOT_ALLOWED"] = 405] = "METHOD_NOT_ALLOWED";
+      StatusCodes5[StatusCodes5["NOT_ACCEPTABLE"] = 406] = "NOT_ACCEPTABLE";
+      StatusCodes5[StatusCodes5["PROXY_AUTHENTICATION_REQUIRED"] = 407] = "PROXY_AUTHENTICATION_REQUIRED";
+      StatusCodes5[StatusCodes5["REQUEST_TIMEOUT"] = 408] = "REQUEST_TIMEOUT";
+      StatusCodes5[StatusCodes5["CONFLICT"] = 409] = "CONFLICT";
+      StatusCodes5[StatusCodes5["GONE"] = 410] = "GONE";
+      StatusCodes5[StatusCodes5["LENGTH_REQUIRED"] = 411] = "LENGTH_REQUIRED";
+      StatusCodes5[StatusCodes5["PRECONDITION_FAILED"] = 412] = "PRECONDITION_FAILED";
+      StatusCodes5[StatusCodes5["REQUEST_TOO_LONG"] = 413] = "REQUEST_TOO_LONG";
+      StatusCodes5[StatusCodes5["REQUEST_URI_TOO_LONG"] = 414] = "REQUEST_URI_TOO_LONG";
+      StatusCodes5[StatusCodes5["UNSUPPORTED_MEDIA_TYPE"] = 415] = "UNSUPPORTED_MEDIA_TYPE";
+      StatusCodes5[StatusCodes5["REQUESTED_RANGE_NOT_SATISFIABLE"] = 416] = "REQUESTED_RANGE_NOT_SATISFIABLE";
+      StatusCodes5[StatusCodes5["EXPECTATION_FAILED"] = 417] = "EXPECTATION_FAILED";
+      StatusCodes5[StatusCodes5["IM_A_TEAPOT"] = 418] = "IM_A_TEAPOT";
+      StatusCodes5[StatusCodes5["INSUFFICIENT_SPACE_ON_RESOURCE"] = 419] = "INSUFFICIENT_SPACE_ON_RESOURCE";
+      StatusCodes5[StatusCodes5["METHOD_FAILURE"] = 420] = "METHOD_FAILURE";
+      StatusCodes5[StatusCodes5["MISDIRECTED_REQUEST"] = 421] = "MISDIRECTED_REQUEST";
+      StatusCodes5[StatusCodes5["UNPROCESSABLE_ENTITY"] = 422] = "UNPROCESSABLE_ENTITY";
+      StatusCodes5[StatusCodes5["LOCKED"] = 423] = "LOCKED";
+      StatusCodes5[StatusCodes5["FAILED_DEPENDENCY"] = 424] = "FAILED_DEPENDENCY";
+      StatusCodes5[StatusCodes5["UPGRADE_REQUIRED"] = 426] = "UPGRADE_REQUIRED";
+      StatusCodes5[StatusCodes5["PRECONDITION_REQUIRED"] = 428] = "PRECONDITION_REQUIRED";
+      StatusCodes5[StatusCodes5["TOO_MANY_REQUESTS"] = 429] = "TOO_MANY_REQUESTS";
+      StatusCodes5[StatusCodes5["REQUEST_HEADER_FIELDS_TOO_LARGE"] = 431] = "REQUEST_HEADER_FIELDS_TOO_LARGE";
+      StatusCodes5[StatusCodes5["UNAVAILABLE_FOR_LEGAL_REASONS"] = 451] = "UNAVAILABLE_FOR_LEGAL_REASONS";
+      StatusCodes5[StatusCodes5["INTERNAL_SERVER_ERROR"] = 500] = "INTERNAL_SERVER_ERROR";
+      StatusCodes5[StatusCodes5["NOT_IMPLEMENTED"] = 501] = "NOT_IMPLEMENTED";
+      StatusCodes5[StatusCodes5["BAD_GATEWAY"] = 502] = "BAD_GATEWAY";
+      StatusCodes5[StatusCodes5["SERVICE_UNAVAILABLE"] = 503] = "SERVICE_UNAVAILABLE";
+      StatusCodes5[StatusCodes5["GATEWAY_TIMEOUT"] = 504] = "GATEWAY_TIMEOUT";
+      StatusCodes5[StatusCodes5["HTTP_VERSION_NOT_SUPPORTED"] = 505] = "HTTP_VERSION_NOT_SUPPORTED";
+      StatusCodes5[StatusCodes5["INSUFFICIENT_STORAGE"] = 507] = "INSUFFICIENT_STORAGE";
+      StatusCodes5[StatusCodes5["NETWORK_AUTHENTICATION_REQUIRED"] = 511] = "NETWORK_AUTHENTICATION_REQUIRED";
+    })(StatusCodes4 = exports.StatusCodes || (exports.StatusCodes = {}));
+  }
+});
+
+// ../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/reason-phrases.js
+var require_reason_phrases = __commonJS({
+  "../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/reason-phrases.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ReasonPhrases = void 0;
+    var ReasonPhrases;
+    (function(ReasonPhrases2) {
+      ReasonPhrases2["ACCEPTED"] = "Accepted";
+      ReasonPhrases2["BAD_GATEWAY"] = "Bad Gateway";
+      ReasonPhrases2["BAD_REQUEST"] = "Bad Request";
+      ReasonPhrases2["CONFLICT"] = "Conflict";
+      ReasonPhrases2["CONTINUE"] = "Continue";
+      ReasonPhrases2["CREATED"] = "Created";
+      ReasonPhrases2["EXPECTATION_FAILED"] = "Expectation Failed";
+      ReasonPhrases2["FAILED_DEPENDENCY"] = "Failed Dependency";
+      ReasonPhrases2["FORBIDDEN"] = "Forbidden";
+      ReasonPhrases2["GATEWAY_TIMEOUT"] = "Gateway Timeout";
+      ReasonPhrases2["GONE"] = "Gone";
+      ReasonPhrases2["HTTP_VERSION_NOT_SUPPORTED"] = "HTTP Version Not Supported";
+      ReasonPhrases2["IM_A_TEAPOT"] = "I'm a teapot";
+      ReasonPhrases2["INSUFFICIENT_SPACE_ON_RESOURCE"] = "Insufficient Space on Resource";
+      ReasonPhrases2["INSUFFICIENT_STORAGE"] = "Insufficient Storage";
+      ReasonPhrases2["INTERNAL_SERVER_ERROR"] = "Internal Server Error";
+      ReasonPhrases2["LENGTH_REQUIRED"] = "Length Required";
+      ReasonPhrases2["LOCKED"] = "Locked";
+      ReasonPhrases2["METHOD_FAILURE"] = "Method Failure";
+      ReasonPhrases2["METHOD_NOT_ALLOWED"] = "Method Not Allowed";
+      ReasonPhrases2["MOVED_PERMANENTLY"] = "Moved Permanently";
+      ReasonPhrases2["MOVED_TEMPORARILY"] = "Moved Temporarily";
+      ReasonPhrases2["MULTI_STATUS"] = "Multi-Status";
+      ReasonPhrases2["MULTIPLE_CHOICES"] = "Multiple Choices";
+      ReasonPhrases2["NETWORK_AUTHENTICATION_REQUIRED"] = "Network Authentication Required";
+      ReasonPhrases2["NO_CONTENT"] = "No Content";
+      ReasonPhrases2["NON_AUTHORITATIVE_INFORMATION"] = "Non Authoritative Information";
+      ReasonPhrases2["NOT_ACCEPTABLE"] = "Not Acceptable";
+      ReasonPhrases2["NOT_FOUND"] = "Not Found";
+      ReasonPhrases2["NOT_IMPLEMENTED"] = "Not Implemented";
+      ReasonPhrases2["NOT_MODIFIED"] = "Not Modified";
+      ReasonPhrases2["OK"] = "OK";
+      ReasonPhrases2["PARTIAL_CONTENT"] = "Partial Content";
+      ReasonPhrases2["PAYMENT_REQUIRED"] = "Payment Required";
+      ReasonPhrases2["PERMANENT_REDIRECT"] = "Permanent Redirect";
+      ReasonPhrases2["PRECONDITION_FAILED"] = "Precondition Failed";
+      ReasonPhrases2["PRECONDITION_REQUIRED"] = "Precondition Required";
+      ReasonPhrases2["PROCESSING"] = "Processing";
+      ReasonPhrases2["EARLY_HINTS"] = "Early Hints";
+      ReasonPhrases2["UPGRADE_REQUIRED"] = "Upgrade Required";
+      ReasonPhrases2["PROXY_AUTHENTICATION_REQUIRED"] = "Proxy Authentication Required";
+      ReasonPhrases2["REQUEST_HEADER_FIELDS_TOO_LARGE"] = "Request Header Fields Too Large";
+      ReasonPhrases2["REQUEST_TIMEOUT"] = "Request Timeout";
+      ReasonPhrases2["REQUEST_TOO_LONG"] = "Request Entity Too Large";
+      ReasonPhrases2["REQUEST_URI_TOO_LONG"] = "Request-URI Too Long";
+      ReasonPhrases2["REQUESTED_RANGE_NOT_SATISFIABLE"] = "Requested Range Not Satisfiable";
+      ReasonPhrases2["RESET_CONTENT"] = "Reset Content";
+      ReasonPhrases2["SEE_OTHER"] = "See Other";
+      ReasonPhrases2["SERVICE_UNAVAILABLE"] = "Service Unavailable";
+      ReasonPhrases2["SWITCHING_PROTOCOLS"] = "Switching Protocols";
+      ReasonPhrases2["TEMPORARY_REDIRECT"] = "Temporary Redirect";
+      ReasonPhrases2["TOO_MANY_REQUESTS"] = "Too Many Requests";
+      ReasonPhrases2["UNAUTHORIZED"] = "Unauthorized";
+      ReasonPhrases2["UNAVAILABLE_FOR_LEGAL_REASONS"] = "Unavailable For Legal Reasons";
+      ReasonPhrases2["UNPROCESSABLE_ENTITY"] = "Unprocessable Entity";
+      ReasonPhrases2["UNSUPPORTED_MEDIA_TYPE"] = "Unsupported Media Type";
+      ReasonPhrases2["USE_PROXY"] = "Use Proxy";
+      ReasonPhrases2["MISDIRECTED_REQUEST"] = "Misdirected Request";
+    })(ReasonPhrases = exports.ReasonPhrases || (exports.ReasonPhrases = {}));
+  }
+});
+
+// ../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/index.js
+var require_cjs = __commonJS({
+  "../../node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/index.js"(exports) {
+    "use strict";
+    var __assign = exports && exports.__assign || function() {
+      __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+          s = arguments[i];
+          for (var p in s)
+            if (Object.prototype.hasOwnProperty.call(s, p))
+              t[p] = s[p];
+        }
+        return t;
+      };
+      return __assign.apply(this, arguments);
+    };
+    var __createBinding = exports && exports.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
+        return m[k];
+      } });
+    } : function(o, m, k, k2) {
+      if (k2 === void 0)
+        k2 = k;
+      o[k2] = m[k];
+    });
+    var __exportStar = exports && exports.__exportStar || function(m, exports2) {
+      for (var p in m)
+        if (p !== "default" && !exports2.hasOwnProperty(p))
+          __createBinding(exports2, m, p);
+    };
+    var __importDefault = exports && exports.__importDefault || function(mod) {
+      return mod && mod.__esModule ? mod : { "default": mod };
+    };
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var legacy_1 = __importDefault(require_legacy());
+    var utils_functions_1 = require_utils_functions();
+    var utils_functions_2 = require_utils_functions();
+    Object.defineProperty(exports, "getStatusCode", { enumerable: true, get: function() {
+      return utils_functions_2.getStatusCode;
+    } });
+    Object.defineProperty(exports, "getReasonPhrase", { enumerable: true, get: function() {
+      return utils_functions_2.getReasonPhrase;
+    } });
+    Object.defineProperty(exports, "getStatusText", { enumerable: true, get: function() {
+      return utils_functions_2.getStatusText;
+    } });
+    var status_codes_1 = require_status_codes();
+    Object.defineProperty(exports, "StatusCodes", { enumerable: true, get: function() {
+      return status_codes_1.StatusCodes;
+    } });
+    var reason_phrases_1 = require_reason_phrases();
+    Object.defineProperty(exports, "ReasonPhrases", { enumerable: true, get: function() {
+      return reason_phrases_1.ReasonPhrases;
+    } });
+    __exportStar(require_legacy(), exports);
+    exports.default = __assign(__assign({}, legacy_1.default), {
+      getStatusCode: utils_functions_1.getStatusCode,
+      getStatusText: utils_functions_1.getStatusText
+    });
+  }
+});
+
 // src/index.ts
 var import_cors = __toESM(require("cors"));
 var import_body_parser = __toESM(require_body_parser());
-var import_express2 = __toESM(require("express"));
+var import_express4 = __toESM(require("express"));
 
 // src/dbUtils.ts
 var import_mongoose = __toESM(require_mongoose2());
@@ -84277,60 +84277,55 @@ var z = /* @__PURE__ */ Object.freeze({
   ZodError
 });
 
-// src/common/models/serviceResponse.ts
-var import_http_status_codes = __toESM(require_cjs());
-var ServiceResponse = class {
-  success;
-  message;
-  responseObject;
-  statusCode;
-  constructor(status, message, responseObject, statusCode) {
-    this.success = status === 0 /* Success */;
-    this.message = message;
-    this.responseObject = responseObject;
-    this.statusCode = statusCode;
+// ../../node_modules/.pnpm/uuid@9.0.1/node_modules/uuid/dist/esm-node/rng.js
+var import_crypto = __toESM(require("crypto"));
+var rnds8Pool = new Uint8Array(256);
+var poolPtr = rnds8Pool.length;
+function rng() {
+  if (poolPtr > rnds8Pool.length - 16) {
+    import_crypto.default.randomFillSync(rnds8Pool);
+    poolPtr = 0;
   }
-};
-function buildNotFoundServiceResponse(message) {
-  return new ServiceResponse(
-    1 /* Failed */,
-    message,
-    null,
-    import_http_status_codes.StatusCodes.NOT_FOUND
-  );
-}
-function buildInternalErrorServiceResponse(message) {
-  return new ServiceResponse(
-    1 /* Failed */,
-    message,
-    null,
-    import_http_status_codes.StatusCodes.NOT_FOUND
-  );
-}
-function buildBadReqServiceResponse(message) {
-  return new ServiceResponse(
-    1 /* Failed */,
-    message,
-    null,
-    import_http_status_codes.StatusCodes.BAD_REQUEST
-  );
-}
-function buildSuccessServiceResponse(message, data) {
-  return new ServiceResponse(
-    0 /* Success */,
-    message,
-    data,
-    import_http_status_codes.StatusCodes.OK
-  );
+  return rnds8Pool.slice(poolPtr, poolPtr += 16);
 }
 
-// src/common/utils/httpHandlers.ts
-var handleServiceResponse = (serviceResponse, response) => {
-  return response.status(serviceResponse.statusCode).send(serviceResponse);
+// ../../node_modules/.pnpm/uuid@9.0.1/node_modules/uuid/dist/esm-node/stringify.js
+var byteToHex = [];
+for (let i = 0; i < 256; ++i) {
+  byteToHex.push((i + 256).toString(16).slice(1));
+}
+function unsafeStringify(arr, offset = 0) {
+  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
+}
+
+// ../../node_modules/.pnpm/uuid@9.0.1/node_modules/uuid/dist/esm-node/native.js
+var import_crypto2 = __toESM(require("crypto"));
+var native_default = {
+  randomUUID: import_crypto2.default.randomUUID
 };
+
+// ../../node_modules/.pnpm/uuid@9.0.1/node_modules/uuid/dist/esm-node/v4.js
+function v4(options, buf, offset) {
+  if (native_default.randomUUID && !buf && !options) {
+    return native_default.randomUUID();
+  }
+  options = options || {};
+  const rnds = options.random || (options.rng || rng)();
+  rnds[6] = rnds[6] & 15 | 64;
+  rnds[8] = rnds[8] & 63 | 128;
+  if (buf) {
+    offset = offset || 0;
+    for (let i = 0; i < 16; ++i) {
+      buf[offset + i] = rnds[i];
+    }
+    return buf;
+  }
+  return unsafeStringify(rnds);
+}
+var v4_default = v4;
 
 // src/api/inventory/inventoryModel.ts
-var import_zod_to_openapi = __toESM(require_dist2());
+var import_mongoose3 = __toESM(require_mongoose2());
 
 // ../../node_modules/.pnpm/@zodyac+zod-mongoose@1.1.2/node_modules/@zodyac/zod-mongoose/dist/index.js
 var import_mongoose2 = __toESM(require_mongoose2(), 1);
@@ -84530,17 +84525,41 @@ function parseMixed(required = true, def) {
 var src_default = zodSchema;
 
 // src/api/inventory/inventoryModel.ts
-var import_mongoose3 = __toESM(require_mongoose2());
+var import_zod_to_openapi = __toESM(require_dist2());
 
 // ../types/types/inventory.ts
-var zInventoryItemSchema = z.object({
-  id: z.string().uuid(),
+var zInventoryItemBaseSchema = z.object({
   metalType: z.enum(["gold", "silver", "copper"]),
   weight: z.number(),
-  unit: z.enum(["mg", "g"]),
+  unit: z.enum(["g"]),
   itemName: z.string(),
-  purity: z.number().min(0).max(100),
-  lastModified: z.date().default(() => /* @__PURE__ */ new Date())
+  purity: z.number().min(0).max(100)
+});
+var zInventoryItemSchema = zInventoryItemBaseSchema.merge(
+  z.object({
+    id: z.string().uuid(),
+    lastModified: z.date().default(() => /* @__PURE__ */ new Date()),
+    createdAt: z.date().default(() => /* @__PURE__ */ new Date())
+  })
+);
+
+// ../types/types/rate.ts
+var zRateSchema = z.object({
+  formula: z.string(),
+  createdAt: z.date().default(() => /* @__PURE__ */ new Date()),
+  modifiedAt: z.date().default(() => /* @__PURE__ */ new Date())
+});
+
+// ../types/types/customer.ts
+var isValidPhoneNumber = (n) => /^[0-9]{10}$/.test(n);
+var zCustomerSchema = z.object({
+  name: z.string(),
+  id: z.string().uuid(),
+  contact: z.string().min(10).max(10).refine((n) => isValidPhoneNumber(n)),
+  orders: z.array(z.string()),
+  // TODO: Make it more specific, can't be just str
+  balance: z.number(),
+  address: z.string().optional()
 });
 
 // src/api/inventory/inventoryModel.ts
@@ -84555,6 +84574,65 @@ var getInventoryById = async (id) => {
   const result = await Inventory.find({ id });
   return result;
 };
+var updateInventory = async (id, update) => {
+  const result = await Inventory.findOneAndUpdate(
+    { id },
+    { ...update },
+    { new: true }
+  );
+  return result;
+};
+var createInventoryInDB = async (item) => {
+  const result = await Inventory.create(item);
+  return result;
+};
+
+// src/common/models/serviceResponse.ts
+var import_http_status_codes = __toESM(require_cjs());
+var ServiceResponse = class {
+  success;
+  message;
+  responseObject;
+  statusCode;
+  constructor(status, message, responseObject, statusCode) {
+    this.success = status === 0 /* Success */;
+    this.message = message;
+    this.responseObject = responseObject;
+    this.statusCode = statusCode;
+  }
+};
+function buildNotFoundServiceResponse(message) {
+  return new ServiceResponse(
+    1 /* Failed */,
+    message,
+    null,
+    import_http_status_codes.StatusCodes.NOT_FOUND
+  );
+}
+function buildInternalErrorServiceResponse(message) {
+  return new ServiceResponse(
+    1 /* Failed */,
+    message,
+    null,
+    import_http_status_codes.StatusCodes.NOT_FOUND
+  );
+}
+function buildBadReqServiceResponse(message) {
+  return new ServiceResponse(
+    1 /* Failed */,
+    message,
+    null,
+    import_http_status_codes.StatusCodes.BAD_REQUEST
+  );
+}
+function buildSuccessServiceResponse(message, data) {
+  return new ServiceResponse(
+    0 /* Success */,
+    message,
+    data,
+    import_http_status_codes.StatusCodes.OK
+  );
+}
 
 // src/api/inventory/inventoryService.ts
 var inventoryService = {
@@ -84583,33 +84661,78 @@ var inventoryService = {
       const errorMsg = `Error finding inventory: $${error.message}`;
       return buildInternalErrorServiceResponse(errorMsg);
     }
+  },
+  updateById: async (id, update) => {
+    try {
+      const updateResult = await updateInventory(id, update);
+      if (!updateResult) {
+        return buildNotFoundServiceResponse(`No Inventory Item Found ID: [${id}]`);
+      }
+      return buildSuccessServiceResponse("Updated Inventory", updateResult);
+    } catch (error) {
+      const errorMsg = `Error while updating inventory: ${error.message}`;
+      return buildInternalErrorServiceResponse(errorMsg);
+    }
+  },
+  createInventory: async (item) => {
+    try {
+      const invItem = {
+        ...item,
+        id: v4_default(),
+        createdAt: /* @__PURE__ */ new Date(),
+        lastModified: /* @__PURE__ */ new Date()
+      };
+      const dbItem = await createInventoryInDB(invItem);
+      return buildSuccessServiceResponse("Created new inventory item", dbItem);
+    } catch (error) {
+      const errorMsg = `Error creating inventory: ${error.message}`;
+      return buildInternalErrorServiceResponse(errorMsg);
+    }
   }
-  // updateInventory: async(): Promise<ServiceResponse<InventoryItem[] | null>> => {
-  //   try {
-  //
-  //     
-  //   } catch (error) {
-  //     const errorMsg = `Error while updating inventory: ${(error as Error).message}`
-  //     return buildInternalErrorServiceResponse(errorMsg)
-  //   }
-  // },
 };
 
 // src/api/inventory/validators.ts
+var import_http_status_codes3 = __toESM(require_cjs());
+
+// src/common/utils/httpHandlers.ts
 var import_http_status_codes2 = __toESM(require_cjs());
+
+// src/common/utils/zodUtilities.ts
+var makeZodValidationErrorObj = (error) => {
+  return `Invalid inputs: ${error.errors.map((e) => e.message)}`;
+};
+
+// src/common/utils/httpHandlers.ts
+var handleServiceResponse = (serviceResponse, response) => {
+  return response.status(serviceResponse.statusCode).send(serviceResponse);
+};
+var handleZodValidationErrors = (error, res) => {
+  const errorMsg = makeZodValidationErrorObj(error);
+  res.status(import_http_status_codes2.StatusCodes.BAD_REQUEST).send(buildBadReqServiceResponse(errorMsg));
+};
+var validateRequestData = (schema) => (req, res, next) => {
+  try {
+    const parsedBody = schema.parse(req.body);
+    req.body = parsedBody;
+    next();
+  } catch (error) {
+    handleZodValidationErrors(error, res);
+  }
+};
+
+// src/api/inventory/validators.ts
 var validateUpdateInventoryReq = (req, res, next) => {
   const { body } = req;
   if (!body.id) {
-    res.status(import_http_status_codes2.StatusCodes.BAD_REQUEST).send(buildBadReqServiceResponse("Please pass inventory ID."));
+    res.status(import_http_status_codes3.StatusCodes.BAD_REQUEST).send(buildBadReqServiceResponse("Please pass inventory ID."));
   }
   const partialInventorySchema = zInventoryItemSchema.partial();
   try {
     const parsedBody = partialInventorySchema.parse(body);
-    req.body = parsedBody;
+    req.parsedBody = parsedBody;
     next();
   } catch (error) {
-    const errorMessage = `Invalid input: ${error.errors.map((e) => e.message).join(", ")}`;
-    res.status(import_http_status_codes2.StatusCodes.BAD_REQUEST).send(buildBadReqServiceResponse(errorMessage));
+    handleZodValidationErrors(error, res);
   }
 };
 
@@ -84629,15 +84752,131 @@ var inventoryRouter = (() => {
     "/update",
     validateUpdateInventoryReq,
     async (req, res) => {
-      console.log(req.body);
-      handleServiceResponse(buildBadReqServiceResponse("False!"), res);
+      const { parsedBody: body } = req;
+      if (!body) {
+        handleServiceResponse(
+          buildInternalErrorServiceResponse("Something is not right"),
+          res
+        );
+        return;
+      }
+      const { id, ...update } = body;
+      update.lastModified = /* @__PURE__ */ new Date();
+      if (!id) {
+        return;
+      }
+      const updatedItem = await inventoryService.updateById(id, update);
+      handleServiceResponse(updatedItem, res);
+    }
+  );
+  router.post(
+    "/add",
+    validateRequestData(zInventoryItemBaseSchema),
+    async (req, res) => {
+      const { body } = req;
+      const item = await inventoryService.createInventory({ ...body });
+      handleServiceResponse(item, res);
+    }
+  );
+  return router;
+})();
+
+// src/api/rate/rateRouter.ts
+var import_express2 = require("express");
+
+// src/api/rate/rateModel.ts
+var import_mongoose4 = __toESM(require_mongoose2());
+var rateSchema = src_default(zRateSchema);
+var RateModel = (0, import_mongoose4.model)("Rate", rateSchema);
+var CreateRateFormula = async (data) => {
+  const result = await RateModel.create(data);
+  return result;
+};
+
+// src/api/rate/rateService.ts
+var RateService = {
+  createFormula: async (data) => {
+    try {
+      const formula = await CreateRateFormula(data);
+      return buildSuccessServiceResponse("Created formula", formula);
+    } catch (error) {
+      const errorMsg = `Error creating inventory: ${error.message}`;
+      return buildInternalErrorServiceResponse(errorMsg);
+    }
+  }
+};
+
+// src/api/rate/rateRouter.ts
+var rateRouter = (() => {
+  const router = (0, import_express2.Router)();
+  router.post(
+    "/set-formula",
+    validateRequestData(zRateSchema.pick({ formula: true })),
+    async (req, res) => {
+      const { body } = req;
+      const data = {
+        ...body,
+        createdAt: /* @__PURE__ */ new Date(),
+        modifiedAt: /* @__PURE__ */ new Date()
+      };
+      const formula = await RateService.createFormula(data);
+      handleServiceResponse(formula, res);
+    }
+  );
+  return router;
+})();
+
+// src/api/customer/customerRouter.ts
+var import_express3 = require("express");
+
+// src/api/customer/customerModel.ts
+var import_mongoose5 = __toESM(require_mongoose2());
+var mCustomerSchema = src_default(zCustomerSchema);
+var Customers = (0, import_mongoose5.model)("customer", mCustomerSchema);
+mCustomerSchema.index({ name: 1 }, { background: true });
+mCustomerSchema.index({ id: 1 }, { background: true, unique: true });
+mCustomerSchema.index({ contact: 1 }, { background: true });
+var getCustomersByName = async (name) => {
+  const result = await Customers.find({ $text: { $search: name } });
+  return result;
+};
+
+// src/api/customer/customerService.ts
+var customerService = {
+  findCustomer: async (query) => {
+    try {
+      const customers = await getCustomersByName(query);
+      if (!customers) {
+        return buildNotFoundServiceResponse(`No customers found: ${query}`);
+      }
+      return buildSuccessServiceResponse("found customers", customers);
+    } catch (error) {
+      const errorMsg = `Error finding customers: ${error.message}`;
+      return buildInternalErrorServiceResponse(errorMsg);
+    }
+  }
+};
+
+// src/api/customer/customerRouter.ts
+var customerRouter = (() => {
+  const router = (0, import_express3.Router)();
+  router.get("/name/:name", async (req, res) => {
+    const { params: { name } } = req;
+    const customers = await customerService.findCustomer(name);
+    handleServiceResponse(customers, res);
+  });
+  router.post(
+    "/add",
+    validateRequestData(zCustomerSchema),
+    async (req, res) => {
+      const { body } = req;
     }
   );
   return router;
 })();
 
 // src/index.ts
-var app = (0, import_express2.default)();
+var app = (0, import_express4.default)();
 var PORT = 8e3;
 var jsonParser = import_body_parser.default.json();
 var urlencodedParser = import_body_parser.default.urlencoded({ extended: false });
@@ -84645,6 +84884,8 @@ app.use(urlencodedParser);
 app.use(jsonParser);
 app.use((0, import_cors.default)());
 app.use("/inventory", inventoryRouter);
+app.use("/rate", rateRouter);
+app.use("/customers", customerRouter);
 connectToDB();
 app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
 /*! Bundled license information:
